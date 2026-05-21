@@ -83,23 +83,7 @@ export default function Header() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 shrink-0 group">
-            {/* AI 图标 */}
-            <div className="relative flex items-center justify-center w-[52px] h-[52px] rounded-xl overflow-hidden shrink-0"
-              style={{
-                background: 'linear-gradient(135deg, hsl(var(--primary)) 0%, #7c3aed 60%, #06b6d4 100%)',
-                boxShadow: '0 0 20px hsl(var(--primary)/0.55), 0 2px 10px rgba(0,0,0,0.4)',
-              }}>
-              <div className="absolute inset-0 opacity-30"
-                style={{ background: 'radial-gradient(circle at 30% 25%, rgba(255,255,255,0.6) 0%, transparent 60%)' }} />
-              <div className="absolute top-0 left-0 w-full h-px opacity-60"
-                style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent)' }} />
-              <span className="relative z-10 text-white font-black text-[18px] tracking-tighter leading-none select-none"
-                style={{ letterSpacing: '-0.03em' }}>
-                AI
-              </span>
-              <div className="absolute bottom-2 right-2 w-1.5 h-1.5 rounded-full bg-white/70" />
-            </div>
-            <span className="text-[28px] font-bold gradient-text leading-none">筑梦呈剧</span>
+            <span className="text-[28px] font-bold gradient-text leading-none">AI筑梦呈剧</span>
           </Link>
 
           {/* 桌面导航 */}
