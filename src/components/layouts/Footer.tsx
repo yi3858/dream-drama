@@ -39,22 +39,7 @@ export default function Footer() {
           {/* 品牌区 */}
           <div className="space-y-4">
             <Link to="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl gradient-primary-bg flex items-center justify-center glow-primary">
-                <Sparkles className="w-5 h-5 text-white" />
-              </div>
-              <div className="flex items-center gap-1.5">
-                <div className="relative flex items-center justify-center w-7 h-7 rounded-lg overflow-hidden shrink-0"
-                style={{
-                  background: 'linear-gradient(135deg, hsl(var(--primary)) 0%, #7c3aed 60%, #06b6d4 100%)',
-                  boxShadow: '0 0 10px hsl(var(--primary)/0.5)',
-                }}>
-                <div className="absolute inset-0 opacity-30"
-                  style={{ background: 'radial-gradient(circle at 30% 25%, rgba(255,255,255,0.6) 0%, transparent 60%)' }} />
-                <span className="relative z-10 text-white font-black text-[11px] tracking-tighter leading-none">AI</span>
-                <div className="absolute bottom-1 right-1 w-0.5 h-0.5 rounded-full bg-white/70" />
-              </div>
-                <span className="text-lg font-bold gradient-text">筑梦呈剧</span>
-              </div>
+              <span className="text-lg font-bold gradient-text">AI筑梦呈剧</span>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed text-pretty">
               专业AI漫剧制作平台，用科技赋能创作，让每个故事都能绽放光彩。
