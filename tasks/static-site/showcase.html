@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>作品案例 - 漫绘星球</title>
+  <meta name="description" content="浏览来自全球创作者的AI漫剧精选作品"/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .filter-bar{display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:2rem;align-items:center;}
+    .filter-tabs{display:flex;gap:.4rem;flex-wrap:wrap;}
+    .ftab{padding:.45rem 1rem;border-radius:.5rem;border:1px solid var(--border);font-size:.875rem;color:var(--text-muted);cursor:pointer;transition:all .2s;background:transparent;}
+    .ftab.active,.ftab:hover{border-color:var(--primary);color:var(--primary-light);background:rgba(139,92,246,.08);}
+    .search-wrap{position:relative;flex:1;max-width:320px;}
+    .search-wrap input{width:100%;padding:.5rem 1rem .5rem 2.25rem;background:var(--bg-card);border:1px solid var(--border);border-radius:.5rem;color:#e2e8f0;font-size:.875rem;outline:none;}
+    .search-wrap input:focus{border-color:var(--primary);}
+    .search-wrap::before{content:"🔍";position:absolute;left:.65rem;top:50%;transform:translateY(-50%);font-size:.85rem;pointer-events:none;}
+    .works-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem;}
+    .wcard{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;display:flex;flex-direction:column;transition:border-color .25s,box-shadow .25s;}
+    .wcard:hover{border-color:rgba(139,92,246,.35);box-shadow:var(--shadow-hover);}
+    .wthumb{aspect-ratio:16/9;overflow:hidden;position:relative;cursor:pointer;}
+    .wthumb-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:3.5rem;transition:transform .35s;}
+    .wcard:hover .wthumb-inner{transform:scale(1.06);}
+    .wthumb-overlay{position:absolute;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .25s;}
+    .wcard:hover .wthumb-overlay{opacity:1;}
+    .play-btn{width:3rem;height:3rem;border-radius:9999px;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.6);display:flex;align-items:center;justify-content:center;font-size:1.2rem;backdrop-filter:blur(4px);}
+    .wbody{padding:1rem 1.25rem 1.25rem;flex:1;display:flex;flex-direction:column;}
+    .wtags{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.6rem;}
+    .wtitle{font-size:1rem;font-weight:600;margin-bottom:.35rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .wdesc{font-size:.8rem;color:var(--text-muted);line-height:1.55;flex:1;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+    .wfooter{display:flex;align-items:center;justify-content:space-between;margin-top:.75rem;font-size:.8rem;color:var(--text-muted);}
+    .wauthor{display:flex;align-items:center;gap:.4rem;}
+    .wavatar{width:1.5rem;height:1.5rem;border-radius:9999px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:.65rem;color:#fff;font-weight:700;flex-shrink:0;}
+    .wstats{display:flex;align-items:center;gap:.75rem;}
+  </style>
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="logo"><div class="logo-icon">✨</div><span class="logo-text">漫绘星球</span></a>
+    <div class="nav-links">
+      <a href="novel-to-comic.html" class="nav-link">📖 小说转漫剧</a>
+      <a href="video-to-anime.html" class="nav-link">🎬 短剧转动漫</a>
+      <div class="nav-dropdown">
+        <span class="nav-link active" style="cursor:pointer;">⭐ 创作中心 ▾</span>
+        <div class="nav-dropdown-menu">
+          <a href="showcase.html" class="nav-dropdown-item">🖼 作品案例</a>
+          <a href="trending.html" class="nav-dropdown-item">🔥 创作热点</a>
+          <a href="analysis.html" class="nav-dropdown-item">📊 爆款分析</a>
+        </div>
+      </div>
+      <a href="pricing.html" class="nav-link">👑 会员充值 <span class="hot-badge">HOT</span></a>
+      <a href="agent.html" class="nav-link">🤝 代理招商</a>
+    </div>
+    <div class="nav-actions">
+      <a href="login.html" class="nav-btn-ghost">登录</a>
+      <a href="register.html" class="nav-btn-primary">免费注册</a>
+      <button class="hamburger" onclick="toggleMobile()" aria-label="菜单"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="novel-to-comic.html" class="mobile-nav-link" onclick="closeMobile()">📖 小说转漫剧</a>
+  <a href="video-to-anime.html" class="mobile-nav-link" onclick="closeMobile()">🎬 短剧转动漫</a>
+  <a href="showcase.html" class="mobile-nav-link" onclick="closeMobile()">🖼 作品案例</a>
+  <a href="pricing.html" class="mobile-nav-link" onclick="closeMobile()">👑 会员充值</a>
+  <a href="agent.html" class="mobile-nav-link" onclick="closeMobile()">🤝 代理招商</a>
+  <div class="mobile-nav-actions">
+    <a href="login.html" class="outline-btn">登录</a>
+    <a href="register.html" class="grad-btn">免费注册</a>
+  </div>
+</div>
+
+<main style="padding-top:5rem;padding-bottom:4rem;">
+  <div class="container">
+    <div class="section-title" style="margin-bottom:2rem;">
+      <div class="badge badge-primary mb-3">🖼 精选作品</div>
+      <h1 style="font-size:clamp(1.75rem,3vw,2.5rem);font-weight:800;margin-bottom:.75rem;">创作者作品展示</h1>
+      <p class="text-muted" style="max-width:500px;margin:0 auto;">来自全球创作者的AI漫剧作品，探索无限创作可能</p>
+    </div>
+
+    <!-- 筛选栏 -->
+    <div class="filter-bar">
+      <div class="filter-tabs">
+        <button class="ftab active" data-filter="all" onclick="setFilter(this)">全部</button>
+        <button class="ftab" data-filter="novel" onclick="setFilter(this)">小说转漫剧</button>
+        <button class="ftab" data-filter="video" onclick="setFilter(this)">短剧转动漫</button>
+      </div>
+      <div class="search-wrap">
+        <input type="text" id="searchInput" placeholder="搜索作品..." oninput="filterWorks()"/>
+      </div>
+    </div>
+
+    <!-- 作品网格 -->
+    <div class="works-grid" id="worksGrid"></div>
+
+    <!-- 加载更多 -->
+    <div style="text-align:center;margin-top:3rem;">
+      <button class="outline-btn" id="loadMoreBtn" onclick="loadMore()">加载更多作品</button>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="index.html" class="logo"><div class="logo-icon">✨</div><span class="logo-text">漫绘星球</span></a>
+        <p>专业AI漫剧制作平台，让每个故事都能绽放光彩。</p>
+        <div class="footer-contact"><span>📧 support@mhxq.com</span></div>
+      </div>
+      <div class="footer-col"><h4>快速入口</h4><ul>
+        <li><a href="novel-to-comic.html">小说转漫剧</a></li>
+        <li><a href="video-to-anime.html">短剧转动漫</a></li>
+        <li><a href="pricing.html">积分充值</a></li>
+        <li><a href="agent.html">代理招商</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 漫绘星球 · 保留所有权利</p>
+      <p>⚠️ 所有AI生成内容均携带AI标识 · 请合规使用</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>20));
+function toggleMobile(){document.getElementById('mobileNav').classList.toggle('open');document.body.style.overflow=document.getElementById('mobileNav').classList.contains('open')?'hidden':'';}
+function closeMobile(){document.getElementById('mobileNav').classList.remove('open');document.body.style.overflow='';}
+
+const WORKS=[
+  {type:'novel',emoji:'🏔',title:'修仙之路：逆天改命',desc:'少年萧炎被废除丹田，三年后以全新之姿归来，踏上逆天修仙之路。国风水墨风格，恢弘大气。',style:'国风水墨',author:'星辰创作者',views:12400,likes:892,featured:true},
+  {type:'video',emoji:'🌃',title:'赛博都市：霓虹之夜',desc:'未来都市中，侦探张默追查跨越虚实的数字犯罪案。赛博朋克风格，霓虹视觉。',style:'赛博朋克',author:'霓虹工作室',views:9800,likes:743,featured:true},
+  {type:'novel',emoji:'🌸',title:'樱花下的约定',desc:'两个异乡人在樱花盛开的小城相遇，一段治愈系的都市爱情故事。新海诚风格，唯美动人。',style:'新海诚风',author:'浪漫主义者',views:7600,likes:614,featured:true},
+  {type:'video',emoji:'⚔️',title:'江湖传说·血刃行',desc:'侠客独行江湖，除暴安良，遭各路势力追杀。古风写实风格，打斗流畅写意。',style:'古风写实',author:'江湖客',views:11200,likes:856},
+  {type:'novel',emoji:'🚀',title:'星际迷途',desc:'人类最后一艘飞船在宇宙深处迷失，舰长率众寻找回家的路。科幻赛博风格，视觉震撼。',style:'科幻赛博',author:'宇宙流浪者',views:8300,likes:621},
+  {type:'video',emoji:'🐉',title:'龙族崛起',desc:'东方龙族后裔觉醒力量，与黑暗势力展开史诗级对决。3D国漫风格，特效精彩。',style:'3D国漫',author:'龙魂工作室',views:15600,likes:1230},
+  {type:'novel',emoji:'🎭',title:'末日剧场',desc:'末日降临，幸存者在废土上寻找新的希望与文明。后启示录风格，沉浸感极强。',style:'写实风',author:'末日幸存者',views:6800,likes:512},
+  {type:'video',emoji:'🌊',title:'深海秘境',desc:'海洋生物学家深入未知海沟，发现神秘文明遗迹。奇幻动漫风格，色彩梦幻。',style:'日漫风',author:'深海探险家',views:9100,likes:688},
+  {type:'novel',emoji:'🏯',title:'幕末风云',desc:'明治维新前夕，武士与新式军队的最后对决。日式水墨风格，历史感厚重。',style:'水墨风',author:'时代记录者',views:7200,likes:548},
+];
+
+let currentFilter='all';
+let visibleCount=6;
+
+function renderWorks(){
+  const kw=document.getElementById('searchInput').value.toLowerCase();
+  const filtered=WORKS.filter(w=>{
+    const matchType=currentFilter==='all'||(currentFilter==='novel'&&w.type==='novel')||(currentFilter==='video'&&w.type==='video');
+    const matchKw=!kw||w.title.toLowerCase().includes(kw)||w.desc.toLowerCase().includes(kw);
+    return matchType&&matchKw;
+  });
+  const visible=filtered.slice(0,visibleCount);
+  document.getElementById('worksGrid').innerHTML=visible.map(w=>`
+    <div class="wcard">
+      <div class="wthumb" style="background:linear-gradient(135deg,rgba(139,92,246,.2),rgba(34,211,238,.15));">
+        <div class="wthumb-inner">${w.emoji}</div>
+        <div class="wthumb-overlay"><div class="play-btn">▶</div></div>
+        ${w.featured?'<span style="position:absolute;top:.5rem;right:.5rem;" class="badge badge-grad" style="font-size:.65rem;padding:.15rem .45rem;">⭐ 精选</span>':''}
+      </div>
+      <div class="wbody">
+        <div class="wtags">
+          <span class="badge ${w.type==='novel'?'badge-primary':'badge-cyan'}" style="font-size:.7rem;padding:.15rem .5rem;">${w.type==='novel'?'小说转漫剧':'短剧转动漫'}</span>
+          <span class="badge" style="background:rgba(148,163,184,.1);color:var(--text-muted);border:1px solid var(--border);font-size:.7rem;padding:.15rem .5rem;">${w.style}</span>
+        </div>
+        <div class="wtitle">${w.title}</div>
+        <div class="wdesc">${w.desc}</div>
+        <div class="wfooter">
+          <div class="wauthor">
+            <div class="wavatar">${w.author[0]}</div>
+            <span>${w.author}</span>
+          </div>
+          <div class="wstats">
+            <span>👁 ${(w.views/1000).toFixed(1)}k</span>
+            <span>❤️ ${w.likes}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+  document.getElementById('loadMoreBtn').style.display=visible.length>=filtered.length?'none':'';
+}
+
+function setFilter(btn){
+  document.querySelectorAll('.ftab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  currentFilter=btn.dataset.filter;
+  visibleCount=6;
+  renderWorks();
+}
+function filterWorks(){visibleCount=6;renderWorks();}
+function loadMore(){visibleCount+=6;renderWorks();}
+
+renderWorks();
+</script>
+</body>
+</html>

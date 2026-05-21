@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>漫绘星球 - AI漫剧制作聚合平台</title>
+    <meta name="description" content="漫绘星球 - 专业AI漫剧制作平台，小说一键转漫剧，短剧智能转动漫，开启你的创作新纪元" />
+    <style>
+      /* 预渲染骨架屏，保证首屏内容和SEO */
+      html, body { margin: 0; padding: 0; background: #0a0e1a; color: #e2e8f0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+      .sr-loading { animation: srPulse 2s cubic-bezier(.4,0,.6,1) infinite; }
+      @keyframes srPulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+      .sr-hero { min-height: 90vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; background: linear-gradient(135deg, #1a1033 0%, #0d1b2a 50%, #1a0f2e 100%); }
+      .sr-glow-1 { position: absolute; top: 20%; left: 20%; width: 24rem; height: 24rem; background: rgba(139,92,246,.15); border-radius: 9999px; filter: blur(80px); pointer-events: none; }
+      .sr-glow-2 { position: absolute; bottom: 20%; right: 20%; width: 20rem; height: 20rem; background: rgba(6,182,212,.1); border-radius: 9999px; filter: blur(80px); pointer-events: none; }
+      .sr-container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; position: relative; z-index: 1; }
+      .sr-text-center { text-align: center; }
+      .sr-badge { display: inline-flex; align-items: center; gap: .375rem; padding: .375rem 1rem; border-radius: 9999px; border: 1px solid rgba(139,92,246,.3); background: rgba(139,92,246,.15); color: #a78bfa; font-size: .875rem; margin-bottom: 1.5rem; }
+      .sr-title { font-size: clamp(2.25rem, 5vw, 4.5rem); font-weight: 700; line-height: 1.1; margin-bottom: 1.5rem; }
+      .sr-gradient { background: linear-gradient(90deg, #c084fc, #22d3ee); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+      .sr-subtitle { font-size: 1.125rem; color: #94a3b8; max-width: 640px; margin: 0 auto 2rem; line-height: 1.6; }
+      .sr-btns { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-bottom: 3rem; }
+      .sr-btn-primary { display: inline-flex; align-items: center; gap: .5rem; padding: .75rem 2rem; border-radius: .75rem; border: none; background: linear-gradient(135deg, #8b5cf6, #0ea5e9); color: #fff; font-size: 1rem; font-weight: 500; text-decoration: none; cursor: pointer; }
+      .sr-btn-secondary { display: inline-flex; align-items: center; gap: .5rem; padding: .75rem 2rem; border-radius: .75rem; border: 1px solid rgba(148,163,184,.3); background: transparent; color: #e2e8f0; font-size: 1rem; text-decoration: none; cursor: pointer; }
+      .sr-tags { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: center; margin-top: 1rem; }
+      .sr-tag { padding: .25rem .75rem; border-radius: 9999px; border: 1px solid rgba(148,163,184,.25); font-size: .75rem; color: #94a3b8; }
+      .sr-section { padding: 5rem 1rem; }
+      .sr-section-alt { background: #0f1425; border-top: 1px solid rgba(148,163,184,.1); border-bottom: 1px solid rgba(148,163,184,.1); }
+      .sr-section-title { text-align: center; margin-bottom: 3rem; }
+      .sr-section-title h2 { font-size: clamp(1.75rem, 3vw, 2.5rem); font-weight: 700; margin-bottom: .75rem; }
+      .sr-section-title p { color: #94a3b8; max-width: 500px; margin: 0 auto; }
+      .sr-grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; max-width: 1000px; margin: 0 auto; }
+      .sr-grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; max-width: 900px; margin: 0 auto; }
+      .sr-card { background: linear-gradient(145deg, #111827, #1a1630); border: 1px solid rgba(148,163,184,.15); border-radius: 1rem; padding: 2rem; position: relative; overflow: hidden; }
+      .sr-card-icon { width: 3.5rem; height: 3.5rem; border-radius: 1rem; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; font-size: 1.5rem; }
+      .sr-card h3 { font-size: 1.5rem; font-weight: 700; margin-bottom: .75rem; }
+      .sr-card p { color: #94a3b8; line-height: 1.6; margin-bottom: 1rem; }
+      .sr-card-tags { display: flex; flex-wrap: wrap; gap: .5rem; }
+      .sr-card-tag { padding: .25rem .625rem; border-radius: .375rem; background: rgba(139,92,246,.1); font-size: .75rem; color: #a78bfa; }
+      .sr-stat { text-align: center; }
+      .sr-stat-num { font-size: 1.875rem; font-weight: 700; background: linear-gradient(90deg, #c084fc, #22d3ee); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+      .sr-stat-label { font-size: .875rem; color: #94a3b8; margin-top: .25rem; }
+      .sr-step { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 1.5rem; position: relative; }
+      .sr-step-num { width: 4rem; height: 4rem; border-radius: 1rem; background: linear-gradient(135deg, #8b5cf6, #0ea5e9); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; }
+      .sr-step h4 { font-size: 1.125rem; font-weight: 600; margin-bottom: .5rem; }
+      .sr-step p { font-size: .875rem; color: #94a3b8; }
+      .sr-footer { padding: 3rem 1rem; text-align: center; border-top: 1px solid rgba(148,163,184,.1); color: #64748b; font-size: .875rem; }
+      .sr-hidden { display: none; }
+      @media (max-width: 640px) { .sr-title { font-size: 2.25rem; } .sr-btn-primary, .sr-btn-secondary { width: 100%; justify-content: center; } }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <!-- 预渲染骨架屏：首屏内容，SEO友好，React加载后自动接管 -->
+      <div class="sr-hero">
+        <div class="sr-glow-1"></div>
+        <div class="sr-glow-2"></div>
+        <div class="sr-container sr-text-center">
+          <div class="sr-badge">✨ 专业AI漫剧制作平台</div>
+          <h1 class="sr-title">让每个故事<span class="sr-gradient">都能成为漫剧</span></h1>
+          <p class="sr-subtitle">AI赋能创作，一键将小说或短剧转为个性化动漫视频。无需专业技能，AI帮你完成分镜、绘图、剪辑全流程。</p>
+          <div class="sr-btns">
+            <a href="/novel-to-comic" class="sr-btn-primary">🚀 立即创作</a>
+            <a href="/showcase" class="sr-btn-secondary">▶ 观看作品</a>
+          </div>
+          <div class="sr-tags">
+              <span class="sr-tag">二次元</span>
+              <span class="sr-tag">写实风</span>
+              <span class="sr-tag">3D国漫</span>
+              <span class="sr-tag">水墨风</span>
+              <span class="sr-tag">欧美漫画</span>
+              <span class="sr-tag">古风插画</span>
+              <span class="sr-tag">赛博朋克</span>
+              <span class="sr-tag">新海诚风</span>
+              <span class="sr-tag">Q版萌系</span>
+            </div>
+        </div>
+      </div>
+
+      <div class="sr-section sr-section-alt">
+        <div class="sr-grid-4">
+          <div class="sr-stat"><div class="sr-stat-num">10万+</div><div class="sr-stat-label">创作者</div></div>
+          <div class="sr-stat"><div class="sr-stat-num">50万+</div><div class="sr-stat-label">生成作品</div></div>
+          <div class="sr-stat"><div class="sr-stat-num">8</div><div class="sr-stat-label">艺术风格</div></div>
+          <div class="sr-stat"><div class="sr-stat-num">4步</div><div class="sr-stat-label">极速出片</div></div>
+        </div>
+      </div>
+
+      <div class="sr-section">
+        <div class="sr-section-title">
+          <div class="sr-badge" style="margin-bottom:1rem;">核心能力</div>
+          <h2>两大创作引擎</h2>
+          <p>小说转漫剧 · 短剧转动漫，一站式AI漫剧创作</p>
+        </div>
+        <div class="sr-grid-2">
+          <div class="sr-card">
+            <div class="sr-card-icon" style="background: linear-gradient(135deg,#8b5cf6,#6366f1);">📖</div>
+            <h3>小说转漫剧</h3>
+            <p>输入小说文本，AI自动分镜拆解、绘制分镜画面、合成动态漫剧视频</p>
+            <div class="sr-card-tags">
+              <span class="sr-card-tag">自动分镜</span>
+              <span class="sr-card-tag">AI绘图</span>
+              <span class="sr-card-tag">视频合成</span>
+            </div>
+          </div>
+          <div class="sr-card">
+            <div class="sr-card-icon" style="background: linear-gradient(135deg,#06b6d4,#3b82f6);">🎬</div>
+            <h3>短剧转动漫</h3>
+            <p>上传实拍短剧素材，一键转换为精美动漫风格，自动剪辑+字幕生成</p>
+            <div class="sr-card-tags">
+              <span class="sr-card-tag">风格转换</span>
+              <span class="sr-card-tag">智能剪辑</span>
+              <span class="sr-card-tag">自动字幕</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sr-section sr-section-alt">
+        <div class="sr-section-title">
+          <div class="sr-badge" style="margin-bottom:1rem;border-color:rgba(6,182,212,.3);background:rgba(6,182,212,.15);color:#67e8f9;">简单流程</div>
+          <h2>4步完成你的漫剧</h2>
+        </div>
+        <div class="sr-grid-4">
+          <div class="sr-step"><div class="sr-step-num">1</div><h4>输入内容</h4><p>粘贴小说文本或上传视频素材</p></div>
+          <div class="sr-step"><div class="sr-step-num">2</div><h4>选择风格</h4><p>8种精美动漫风格任你选择</p></div>
+          <div class="sr-step"><div class="sr-step-num">3</div><h4>AI生成</h4><p>自动分镜、绘图、合成视频</p></div>
+          <div class="sr-step"><div class="sr-step-num">4</div><h4>发布分享</h4><p>一键导出，多端分享传播</p></div>
+        </div>
+      </div>
+
+      <div class="sr-section">
+        <div class="sr-section-title">
+          <div class="sr-badge" style="margin-bottom:1rem;">精选作品</div>
+          <h2>创作者作品展示</h2>
+          <p>来自社区创作者的优秀AI漫剧作品</p>
+        </div>
+        <div class="sr-grid-2" style="max-width: 1200px;">
+          <div class="sr-card" style="padding:0;overflow:hidden;">
+            <div style="aspect-ratio:16/9;background: linear-gradient(135deg, rgba(139,92,246,.2), rgba(6,182,212,.2));display:flex;align-items:center;justify-content:center;font-size:3rem;">✨</div>
+            <div style="padding:1.5rem;">
+              <h3 style="font-size:1.125rem;margin-bottom:.25rem;">修仙之路：逆天改命</h3>
+              <p style="font-size:.875rem;margin-bottom:0;">国风水墨 · 玄幻修仙</p>
+            </div>
+          </div>
+          <div class="sr-card" style="padding:0;overflow:hidden;">
+            <div style="aspect-ratio:16/9;background: linear-gradient(135deg, rgba(6,182,212,.2), rgba(139,92,246,.2));display:flex;align-items:center;justify-content:center;font-size:3rem;">🎬</div>
+            <div style="padding:1.5rem;">
+              <h3 style="font-size:1.125rem;margin-bottom:.25rem;">赛博都市：霓虹之夜</h3>
+              <p style="font-size:.875rem;margin-bottom:0;">赛博朋克 · 未来都市</p>
+            </div>
+          </div>
+          <div class="sr-card" style="padding:0;overflow:hidden;">
+            <div style="aspect-ratio:16/9;background: linear-gradient(135deg, rgba(34,197,94,.2), rgba(6,182,212,.2));display:flex;align-items:center;justify-content:center;font-size:3rem;">🌸</div>
+            <div style="padding:1.5rem;">
+              <h3 style="font-size:1.125rem;margin-bottom:.25rem;">樱花下的约定</h3>
+              <p style="font-size:.875rem;margin-bottom:0;">新海诚风 · 治愈系</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sr-footer">
+        <p>© 2024 漫绘星球 - AI漫剧制作聚合平台</p>
+        <p style="margin-top:.5rem;">让每个人都能成为漫剧创作者</p>
+      </div>
+    </div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

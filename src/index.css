@@ -1,0 +1,431 @@
+/* stylelint-disable */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* AI漫剧制作平台 - 深邃科技暗色风格
+   主题：深海蓝黑背景，科技蓝紫渐变主色，高对比度卡片
+*/
+
+@layer base {
+  :root {
+    --radius: 1rem;
+
+    /* 亮色主题（备用） */
+    --background: 228 30% 97%;
+    --foreground: 228 30% 8%;
+    --card: 0 0% 100%;
+    --card-foreground: 228 30% 8%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 228 30% 8%;
+    --primary: 252 88% 62%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 60% 92%;
+    --secondary-foreground: 228 30% 15%;
+    --muted: 228 20% 93%;
+    --muted-foreground: 228 15% 42%;
+    --accent: 248 18% 91%;
+    --accent-foreground: 248 30% 20%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 228 20% 87%;
+    --input: 228 20% 87%;
+    --ring: 252 88% 62%;
+    --success: 142 71% 45%;
+    --warning: 38 92% 50%;
+    --info: 210 90% 55%;
+    --chart-1: 252 88% 62%;
+    --chart-2: 190 85% 50%;
+    --chart-3: 320 75% 60%;
+    --chart-4: 38 92% 50%;
+    --chart-5: 142 71% 45%;
+    --gradient-primary: linear-gradient(135deg, hsl(252 88% 62%), hsl(196 92% 56%));
+    --gradient-card: linear-gradient(145deg, hsl(228 30% 12%), hsl(248 26% 16%));
+    --gradient-background: linear-gradient(180deg, hsl(228 25% 97%), hsl(248 20% 95%));
+    --gradient-hero: linear-gradient(135deg, hsl(252 60% 18%) 0%, hsl(212 70% 12%) 50%, hsl(278 52% 18%) 100%);
+    --gradient-text: linear-gradient(90deg, hsl(252 95% 72%), hsl(190 100% 62%));
+    --shadow-card: 0 4px 20px -4px hsl(252 88% 62% / 0.12);
+    --shadow-hover: 0 8px 32px -4px hsl(252 88% 62% / 0.28);
+    --shadow-glow: 0 0 32px hsl(252 88% 62% / 0.22);
+    --sidebar-background: 228 25% 97%;
+    --sidebar-foreground: 228 20% 25%;
+    --sidebar-primary: 252 88% 62%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 248 15% 91%;
+    --sidebar-accent-foreground: 248 30% 20%;
+    --sidebar-border: 228 20% 87%;
+    --sidebar-ring: 252 88% 62%;
+    --education-blue: 220 80% 55%;
+    --education-green: 142 71% 45%;
+  }
+
+  /* ── 深色主题（默认启用）── */
+  .dark {
+    /* 深邃深海蓝黑背景 */
+    --background: 228 35% 5.5%;
+    --foreground: 220 18% 93%;
+
+    /* 卡片：比页面背景亮一层，带轻微蓝紫调 */
+    --card: 228 30% 9.5%;
+    --card-foreground: 220 18% 93%;
+    --popover: 228 32% 8%;
+    --popover-foreground: 220 18% 93%;
+
+    /* 主色：明亮电光蓝紫 */
+    --primary: 252 90% 68%;
+    --primary-foreground: 0 0% 100%;
+
+    /* 次色 */
+    --secondary: 228 26% 16%;
+    --secondary-foreground: 220 18% 88%;
+
+    --muted: 228 26% 14%;
+    --muted-foreground: 220 14% 58%;
+
+    /* 强调色：深蓝紫，低饱和 */
+    --accent: 242 22% 18%;
+    --accent-foreground: 220 18% 88%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* 边框：细腻可见但不刺眼 */
+    --border: 228 24% 17%;
+    --input: 228 26% 13%;
+    --ring: 252 90% 68%;
+
+    --success: 142 65% 42%;
+    --warning: 38 90% 50%;
+    --info: 210 85% 58%;
+
+    --chart-1: 252 90% 68%;
+    --chart-2: 190 90% 55%;
+    --chart-3: 320 78% 65%;
+    --chart-4: 38 90% 55%;
+    --chart-5: 142 65% 48%;
+
+    /* 渐变 */
+    --gradient-primary: linear-gradient(135deg, hsl(252 90% 68%), hsl(196 95% 56%));
+    --gradient-card: linear-gradient(145deg, hsl(228 32% 10%), hsl(245 28% 13%));
+    --gradient-background: linear-gradient(180deg, hsl(228 35% 5.5%), hsl(242 30% 7.5%));
+    --gradient-hero: linear-gradient(135deg, hsl(252 55% 14%) 0%, hsl(216 62% 9%) 50%, hsl(282 48% 13%) 100%);
+    --gradient-text: linear-gradient(90deg, hsl(252 100% 74%), hsl(192 100% 64%));
+
+    /* 阴影：更强烈的深色环境阴影 */
+    --shadow-card: 0 2px 16px 0px hsl(228 50% 3% / 0.55);
+    --shadow-hover: 0 6px 32px -4px hsl(252 90% 68% / 0.38);
+    --shadow-glow: 0 0 40px hsl(252 90% 68% / 0.32);
+
+    /* 侧边栏 */
+    --sidebar-background: 228 35% 7%;
+    --sidebar-foreground: 220 16% 78%;
+    --sidebar-primary: 252 90% 68%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 228 26% 13%;
+    --sidebar-accent-foreground: 220 16% 84%;
+    --sidebar-border: 228 24% 14%;
+    --sidebar-ring: 252 90% 68%;
+
+    --education-blue: 215 80% 58%;
+    --education-green: 142 65% 48%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', system-ui, sans-serif;
+  }
+
+  /* 滚动条 */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) transparent;
+  }
+  *::-webkit-scrollbar { width: 6px; background: transparent; }
+  *::-webkit-scrollbar-thumb { background: hsl(var(--border)); border-radius: 3px; }
+}
+
+@layer utilities {
+  /* 渐变文字 */
+  .gradient-text {
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  /* 科技光晕 */
+  .glow-primary {
+    box-shadow: var(--shadow-glow);
+  }
+
+  /* 玻璃拟态卡片 */
+  .glass-card {
+    background: hsl(var(--card) / 0.65);
+    backdrop-filter: blur(14px);
+    border: 1px solid hsl(var(--border) / 0.55);
+  }
+
+  /* 英雄区背景 */
+  .hero-bg {
+    background: var(--gradient-hero);
+  }
+
+  /* 主渐变背景 */
+  .gradient-primary-bg {
+    background: var(--gradient-primary);
+  }
+
+  /* ── Pill 选项按钮（药丸形/全圆角 + 弹性动画）── */
+  .option-pill {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    border: 1.5px solid hsl(var(--border));
+    background: hsl(var(--card));
+    color: hsl(var(--muted-foreground));
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.5rem 1.25rem;
+    /* 弹性缓动：选中/取消时有弹跳感 */
+    transition:
+      border-color 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+      color 0.2s ease,
+      box-shadow 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+      background 0.2s ease,
+      transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    cursor: pointer;
+    outline: none;
+    will-change: transform, box-shadow;
+  }
+  .option-pill:hover {
+    border-color: hsl(var(--primary) / 0.5);
+    color: hsl(var(--foreground));
+    transform: scale(1.03);
+  }
+  /* 按下反馈 */
+  .option-pill:active {
+    transform: scale(0.94);
+    transition-duration: 0.1s;
+  }
+  /* 选中态：描边光晕 + 微抬升 */
+  .option-pill-active {
+    border-color: transparent;
+    color: hsl(var(--foreground));
+    background: hsl(var(--card));
+    transform: scale(1.04);
+    box-shadow:
+      0 0 0 1.5px hsl(var(--primary)),
+      0 0 14px 2px hsl(var(--primary) / 0.35);
+    animation: pill-glow-settle 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+  .dark .option-pill-active {
+    background: hsl(252 90% 68% / 0.08);
+    box-shadow:
+      0 0 0 1.5px hsl(252 90% 68%),
+      0 0 18px 2px hsl(252 90% 68% / 0.32);
+    color: hsl(220 18% 96%);
+  }
+  /* 选中时按下不缩回 */
+  .option-pill-active:active {
+    transform: scale(1.01);
+  }
+
+  /* 卡片内层高亮区域 */
+  .card-highlight {
+    background: hsl(var(--primary) / 0.06);
+    border: 1px solid hsl(var(--primary) / 0.18);
+    border-radius: calc(var(--radius) - 2px);
+  }
+
+  /* 扫描线 */
+  .scanline::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      hsl(var(--primary) / 0.025) 2px,
+      hsl(var(--primary) / 0.025) 4px
+    );
+    pointer-events: none;
+  }
+
+  /* 点阵网格背景 */
+  .grid-bg {
+    background-image:
+      linear-gradient(hsl(var(--border) / 0.25) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--border) / 0.25) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  /* 径向光晕装饰 */
+  .radial-glow {
+    background: radial-gradient(
+      ellipse 60% 50% at 50% 50%,
+      hsl(var(--primary) / 0.15) 0%,
+      transparent 70%
+    );
+  }
+
+  /* 隐藏滚动条但保留滚动能力（横向标签行用） */
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* 骨架屏扫光基础 */
+  .skeleton-base {
+    background: hsl(var(--muted));
+    border-radius: calc(var(--radius) - 4px);
+    position: relative;
+    overflow: hidden;
+  }
+  .skeleton-base::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      hsl(var(--foreground) / 0.04) 40%,
+      hsl(var(--foreground) / 0.07) 50%,
+      hsl(var(--foreground) / 0.04) 60%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-sweep 1.8s ease-in-out infinite;
+  }
+
+  /* 卡片淡入（stagger 由内联 style 注入 animation-delay） */
+  .animate-fade-in-up {
+    opacity: 0;
+    animation: fade-in-up 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+}
+
+/* 动画 */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px hsl(var(--primary) / 0.28); }
+  50% { box-shadow: 0 0 44px hsl(var(--primary) / 0.58); }
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes count-up {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes border-spin {
+  to { --border-angle: 360deg; }
+}
+
+.animate-float { animation: float 3s ease-in-out infinite; }
+.animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent 0%, hsl(var(--primary) / 0.1) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2s linear infinite;
+}
+.animate-slide-up { animation: slide-up 0.5s ease-out forwards; }
+.animate-count-up { animation: count-up 0.6s ease-out forwards; }
+
+/* ── 选中弹跳动画 ── */
+
+/* Pill 选中：光晕爆发后收敛稳定 */
+@keyframes pill-glow-settle {
+  0%   { transform: scale(0.96); box-shadow: 0 0 0 4px hsl(var(--primary)/0.6), 0 0 28px 6px hsl(var(--primary)/0.55); }
+  45%  { transform: scale(1.07); box-shadow: 0 0 0 2px hsl(var(--primary)/0.9), 0 0 22px 4px hsl(var(--primary)/0.45); }
+  70%  { transform: scale(1.02); box-shadow: 0 0 0 1.5px hsl(var(--primary)),   0 0 16px 2px hsl(var(--primary)/0.38); }
+  100% { transform: scale(1.04); box-shadow: 0 0 0 1.5px hsl(var(--primary)),   0 0 14px 2px hsl(var(--primary)/0.32); }
+}
+
+/* 画风卡片选中：弹跳微抬 */
+@keyframes card-select-pop {
+  0%   { transform: scale(1);     }
+  30%  { transform: scale(0.975); }
+  60%  { transform: scale(1.028); }
+  80%  { transform: scale(1.012); }
+  100% { transform: scale(1.015); }
+}
+
+/* 画风卡片取消选中：收回 */
+@keyframes card-deselect {
+  0%   { transform: scale(1.015); }
+  50%  { transform: scale(0.99);  }
+  100% { transform: scale(1);     }
+}
+
+/* 选中徽章弹入：旋转+缩放冲入 */
+@keyframes badge-pop-in {
+  0%   { transform: scale(0) rotate(-30deg); opacity: 0; }
+  55%  { transform: scale(1.35) rotate(8deg); opacity: 1; }
+  75%  { transform: scale(0.9)  rotate(-3deg); }
+  90%  { transform: scale(1.08) rotate(1deg); }
+  100% { transform: scale(1)    rotate(0deg); opacity: 1; }
+}
+
+/* 卡片选中后持续的环形呼吸光晕 */
+@keyframes ring-breathe {
+  0%,100% { box-shadow: 0 0 0 2px hsl(var(--primary)), 0 0 14px 2px hsl(var(--primary)/0.28); }
+  50%      { box-shadow: 0 0 0 2px hsl(var(--primary)), 0 0 26px 5px hsl(var(--primary)/0.48); }
+}
+
+/* 卡片图片悬浮时轻微发光 */
+@keyframes img-hover-glow {
+  from { filter: brightness(1); }
+  to   { filter: brightness(1.08) saturate(1.1); }
+}
+
+.animate-card-select  { animation: card-select-pop  0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+.animate-card-deselect { animation: card-deselect   0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+.animate-badge-pop    { animation: badge-pop-in     0.42s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+.animate-ring-breathe { animation: ring-breathe     2.4s ease-in-out infinite; }
+
+/* 移动端菜单导航项逐个入场 */
+@keyframes nav-item-in {
+  from { opacity: 0; transform: translateX(18px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.animate-nav-item {
+  opacity: 0;
+  animation: nav-item-in 0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+/* 每项延迟由 style 注入 */
+
+/* 骨架屏扫光动画 */
+@keyframes skeleton-sweep {
+  0%   { background-position: -100% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* 卡片淡入上浮 */
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>免费注册 - 漫绘星球</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<div class="auth-page">
+  <div class="hero-glow" style="top:20%;left:15%;width:20rem;height:20rem;background:rgba(139,92,246,.15);"></div>
+  <div class="hero-glow" style="bottom:20%;right:15%;width:18rem;height:18rem;background:rgba(34,211,238,.1);"></div>
+
+  <div class="auth-card">
+    <!-- Logo -->
+    <div style="text-align:center;margin-bottom:2rem;">
+      <a href="index.html" style="display:inline-flex;align-items:center;gap:.65rem;text-decoration:none;">
+        <div class="logo-icon" style="width:2.75rem;height:2.75rem;border-radius:.75rem;">✨</div>
+        <span class="logo-text" style="font-size:1.5rem;">漫绘星球</span>
+      </a>
+      <p class="text-muted" style="font-size:.875rem;margin-top:.5rem;">AI漫剧制作聚合平台</p>
+    </div>
+
+    <h2 style="font-size:1.25rem;font-weight:700;margin-bottom:.35rem;text-align:center;">创建账户</h2>
+    <p class="text-muted" style="font-size:.875rem;text-align:center;margin-bottom:1.75rem;">注册即送 50 免费积分</p>
+
+    <!-- 赠积分提示 -->
+    <div style="background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.25);border-radius:.625rem;padding:.65rem .85rem;margin-bottom:1.25rem;font-size:.8rem;color:#6ee7b7;display:flex;align-items:center;gap:.5rem;">
+      🎁 新用户注册赠送 50 积分，立即体验AI漫剧创作
+    </div>
+
+    <form id="registerForm" onsubmit="handleRegister(event)">
+      <div class="form-group">
+        <label class="form-label">👤 用户名</label>
+        <input type="text" class="form-input" id="username" placeholder="4-20个字符，字母、数字、下划线" required autocomplete="username" oninput="checkUsername(this)"/>
+        <div id="usernameHint" style="font-size:.75rem;margin-top:.3rem;color:var(--text-dim);">用户名将作为你的公开显示名称</div>
+      </div>
+
+      <div class="form-group" style="position:relative;">
+        <label class="form-label">🔒 密码</label>
+        <input type="password" class="form-input" id="password" placeholder="至少8位，包含字母和数字" required autocomplete="new-password" style="padding-right:2.75rem;" oninput="checkPwd()"/>
+        <button type="button" onclick="togglePwd('password')" style="position:absolute;right:.75rem;bottom:.7rem;background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1rem;">👁</button>
+        <!-- 密码强度 -->
+        <div style="display:flex;gap:.25rem;margin-top:.4rem;" id="pwdStrength">
+          <div style="flex:1;height:3px;border-radius:2px;background:var(--border);" id="ps1"></div>
+          <div style="flex:1;height:3px;border-radius:2px;background:var(--border);" id="ps2"></div>
+          <div style="flex:1;height:3px;border-radius:2px;background:var(--border);" id="ps3"></div>
+          <div style="flex:1;height:3px;border-radius:2px;background:var(--border);" id="ps4"></div>
+        </div>
+        <div id="pwdHint" style="font-size:.72rem;margin-top:.25rem;color:var(--text-dim);"></div>
+      </div>
+
+      <div class="form-group" style="position:relative;">
+        <label class="form-label">🔒 确认密码</label>
+        <input type="password" class="form-input" id="confirmPwd" placeholder="再次输入密码" required style="padding-right:2.75rem;" oninput="checkConfirm()"/>
+        <button type="button" onclick="togglePwd('confirmPwd')" style="position:absolute;right:.75rem;bottom:.7rem;background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1rem;">👁</button>
+        <div id="confirmHint" style="font-size:.75rem;margin-top:.3rem;"></div>
+      </div>
+
+      <!-- 邀请码（可选） -->
+      <div class="form-group">
+        <label class="form-label">🔗 邀请码（可选）</label>
+        <input type="text" class="form-input" id="inviteCode" placeholder="有邀请码请填写，额外获得积分奖励"/>
+      </div>
+
+      <!-- 用户协议 -->
+      <label style="display:flex;align-items:flex-start;gap:.6rem;cursor:pointer;font-size:.8rem;color:var(--text-muted);margin-bottom:1rem;">
+        <input type="checkbox" id="agreeTerms" style="margin-top:2px;width:1rem;height:1rem;flex-shrink:0;" required/>
+        <span>我已阅读并同意 <a href="#" style="color:var(--primary-light);">《用户服务协议》</a> 和 <a href="#" style="color:var(--primary-light);">《隐私政策》</a>，同意平台使用我的作品进行模型优化（可在设置中关闭）</span>
+      </label>
+
+      <div id="registerError" style="display:none;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);border-radius:.5rem;padding:.65rem .85rem;font-size:.8rem;color:#fca5a5;margin-bottom:1rem;"></div>
+
+      <button type="submit" class="submit-btn" id="regBtn">免费注册</button>
+    </form>
+
+    <div class="auth-link">
+      已有账号？<a href="login.html">立即登录</a>
+    </div>
+  </div>
+</div>
+
+<script>
+function togglePwd(id){
+  const inp=document.getElementById(id);
+  inp.type=inp.type==='password'?'text':'password';
+}
+
+function checkUsername(el){
+  const v=el.value;
+  const hint=document.getElementById('usernameHint');
+  if(!v){hint.textContent='用户名将作为你的公开显示名称';hint.style.color='var(--text-dim)';return;}
+  if(v.length<4){hint.textContent='⚠️ 用户名至少4个字符';hint.style.color='#fca5a5';return;}
+  if(!/^[a-zA-Z0-9_\u4e00-\u9fa5]+$/.test(v)){hint.textContent='⚠️ 只支持字母、数字、下划线、汉字';hint.style.color='#fca5a5';return;}
+  hint.textContent='✓ 用户名格式正确';hint.style.color='var(--success)';
+}
+
+function checkPwd(){
+  const v=document.getElementById('password').value;
+  const bars=[1,2,3,4].map(i=>document.getElementById('ps'+i));
+  const hint=document.getElementById('pwdHint');
+  bars.forEach(b=>b.style.background='var(--border)');
+  if(!v){hint.textContent='';return;}
+  let score=0;
+  if(v.length>=8)score++;
+  if(/[A-Z]/.test(v))score++;
+  if(/[0-9]/.test(v))score++;
+  if(/[^A-Za-z0-9]/.test(v))score++;
+  const colors=['#f87171','#fbbf24','#34d399','#22d3ee'];
+  const labels=['弱','一般','较强','强'];
+  for(let i=0;i<score;i++)bars[i].style.background=colors[score-1];
+  hint.textContent=score>0?('密码强度：'+labels[score-1]):'';
+  hint.style.color=colors[score-1]||'var(--text-dim)';
+  checkConfirm();
+}
+
+function checkConfirm(){
+  const p=document.getElementById('password').value;
+  const c=document.getElementById('confirmPwd').value;
+  const hint=document.getElementById('confirmHint');
+  if(!c){hint.textContent='';return;}
+  if(p===c){hint.textContent='✓ 密码一致';hint.style.color='var(--success)';}
+  else{hint.textContent='⚠️ 两次密码不一致';hint.style.color='#fca5a5';}
+}
+
+function handleRegister(e){
+  e.preventDefault();
+  const err=document.getElementById('registerError');
+  const btn=document.getElementById('regBtn');
+  const user=document.getElementById('username').value.trim();
+  const pwd=document.getElementById('password').value;
+  const cpwd=document.getElementById('confirmPwd').value;
+  const agreed=document.getElementById('agreeTerms').checked;
+
+  err.style.display='none';
+  if(user.length<4){err.style.display='';err.textContent='⚠️ 用户名至少4个字符';return;}
+  if(pwd.length<8){err.style.display='';err.textContent='⚠️ 密码至少8位';return;}
+  if(pwd!==cpwd){err.style.display='';err.textContent='⚠️ 两次密码不一致';return;}
+  if(!agreed){err.style.display='';err.textContent='⚠️ 请先阅读并同意用户协议';return;}
+
+  btn.textContent='注册中...';
+  btn.disabled=true;
+
+  setTimeout(()=>{
+    btn.textContent='✓ 注册成功，跳转中...';
+    setTimeout(()=>{window.location.href='index.html';},800);
+  },1000);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "ai-video-gen",
+  "version": "1.0.0",
+  "description": "AI视频生成平台 - 后端服务",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "license": "MIT"
+}
