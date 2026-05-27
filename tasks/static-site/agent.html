@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>代理招商 - 漫绘星球</title>
+  <meta name="description" content="加入漫绘星球代理体系，两级代理架构，稳定返点收益"/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .how-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;margin-bottom:4rem;}
+    .how-item{text-align:center;padding:1.5rem 1rem;}
+    .how-num{width:3.5rem;height:3.5rem;border-radius:9999px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;color:#fff;margin:0 auto 1rem;}
+    .how-item h4{font-size:1rem;font-weight:600;margin-bottom:.4rem;}
+    .agent-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;margin-bottom:4rem;}
+    .agent-card{background:var(--bg-card);border:2px solid var(--border);border-radius:var(--radius-lg);padding:2rem;display:flex;flex-direction:column;transition:all .25s;}
+    .agent-card:hover{box-shadow:var(--shadow-hover);}
+    .agent-card.highlight{border-color:var(--cyan);background:rgba(34,211,238,.04);}
+    .agent-level{font-size:.8rem;font-weight:600;margin-bottom:.75rem;}
+    .agent-fee{font-size:2.25rem;font-weight:800;margin-bottom:.25rem;}
+    .agent-fee span{font-size:1rem;font-weight:400;color:var(--text-muted);}
+    .agent-rebate{font-size:.9rem;margin-bottom:1rem;}
+    .perk-list{flex:1;display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.5rem;}
+    .perk{font-size:.875rem;color:var(--text-muted);display:flex;gap:.5rem;}
+    .perk::before{content:"✓";color:var(--success);flex-shrink:0;}
+    .qanda{background:var(--bg-card2);border-radius:var(--radius-lg);padding:2rem;}
+    .qa-item{border-bottom:1px solid var(--border);padding:1rem 0;}
+    .qa-item:last-child{border-bottom:none;}
+    .qa-q{font-size:.95rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;}
+    .qa-a{font-size:.875rem;color:var(--text-muted);line-height:1.7;margin-top:.6rem;display:none;}
+    .qa-a.open{display:block;}
+    .apply-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:flex;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px);}
+    .apply-modal{background:var(--bg-card);border:1px solid var(--border-light);border-radius:1.25rem;padding:2rem;max-width:440px;width:100%;position:relative;}
+  </style>
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="logo"><div class="logo-icon">✨</div><span class="logo-text">漫绘星球</span></a>
+    <div class="nav-links">
+      <a href="novel-to-comic.html" class="nav-link">📖 小说转漫剧</a>
+      <a href="video-to-anime.html" class="nav-link">🎬 短剧转动漫</a>
+      <div class="nav-dropdown">
+        <span class="nav-link" style="cursor:pointer;">⭐ 创作中心 ▾</span>
+        <div class="nav-dropdown-menu">
+          <a href="showcase.html" class="nav-dropdown-item">🖼 作品案例</a>
+        </div>
+      </div>
+      <a href="pricing.html" class="nav-link">👑 会员充值 <span class="hot-badge">HOT</span></a>
+      <a href="agent.html" class="nav-link active">🤝 代理招商</a>
+    </div>
+    <div class="nav-actions">
+      <a href="login.html" class="nav-btn-ghost">登录</a>
+      <a href="register.html" class="nav-btn-primary">免费注册</a>
+      <button class="hamburger" onclick="toggleMobile()" aria-label="菜单"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="novel-to-comic.html" class="mobile-nav-link" onclick="closeMobile()">📖 小说转漫剧</a>
+  <a href="video-to-anime.html" class="mobile-nav-link" onclick="closeMobile()">🎬 短剧转动漫</a>
+  <a href="showcase.html" class="mobile-nav-link" onclick="closeMobile()">🖼 作品案例</a>
+  <a href="pricing.html" class="mobile-nav-link" onclick="closeMobile()">👑 会员充值</a>
+  <a href="agent.html" class="mobile-nav-link" onclick="closeMobile()">🤝 代理招商</a>
+  <div class="mobile-nav-actions">
+    <a href="login.html" class="outline-btn">登录</a>
+    <a href="register.html" class="grad-btn">免费注册</a>
+  </div>
+</div>
+
+<main style="padding-top:5rem;padding-bottom:4rem;">
+  <div class="container" style="max-width:1100px;">
+
+    <!-- 标题 -->
+    <div class="text-center mb-8">
+      <div class="badge badge-cyan mb-3">🤝 代理招商</div>
+      <h1 style="font-size:clamp(1.75rem,3vw,2.5rem);font-weight:800;margin-bottom:.75rem;">加入漫绘星球代理体系</h1>
+      <p class="text-muted" style="max-width:520px;margin:0 auto;line-height:1.7;">两级代理架构，稳定返点收益，助力你打造专属变现渠道</p>
+    </div>
+
+    <!-- 收益展示 -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:3rem;">
+      <div class="card" style="text-align:center;padding:1.25rem;">
+        <div style="font-size:2rem;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">30%</div>
+        <div class="text-muted" style="font-size:.85rem;margin-top:.3rem;">一级代理返点</div>
+      </div>
+      <div class="card" style="text-align:center;padding:1.25rem;">
+        <div style="font-size:2rem;font-weight:800;background:var(--grad-cyan);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">15%</div>
+        <div class="text-muted" style="font-size:.85rem;margin-top:.3rem;">二级代理返点</div>
+      </div>
+      <div class="card" style="text-align:center;padding:1.25rem;">
+        <div style="font-size:2rem;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">实时</div>
+        <div class="text-muted" style="font-size:.85rem;margin-top:.3rem;">收益到账</div>
+      </div>
+      <div class="card" style="text-align:center;padding:1.25rem;">
+        <div style="font-size:2rem;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">永久</div>
+        <div class="text-muted" style="font-size:.85rem;margin-top:.3rem;">绑定用户</div>
+      </div>
+    </div>
+
+    <!-- 操作流程 -->
+    <div class="section-title" style="text-align:left;margin-bottom:1.5rem;">
+      <div class="badge badge-cyan mb-2">操作流程</div>
+      <h2 style="font-size:1.5rem;font-weight:700;">如何成为代理？</h2>
+    </div>
+    <div class="how-grid">
+      <div class="how-item">
+        <div class="how-num">01</div>
+        <h4>选择代理等级</h4>
+        <p class="text-muted" style="font-size:.85rem;">根据自身资源选择合适的代理级别</p>
+      </div>
+      <div class="how-item">
+        <div class="how-num">02</div>
+        <h4>缴纳代理费</h4>
+        <p class="text-muted" style="font-size:.85rem;">完成代理费支付，获得代理资格</p>
+      </div>
+      <div class="how-item">
+        <div class="how-num">03</div>
+        <h4>获取推广链接</h4>
+        <p class="text-muted" style="font-size:.85rem;">在推广后台获取专属推广链接和素材</p>
+      </div>
+      <div class="how-item">
+        <div class="how-num">04</div>
+        <h4>推广赚返点</h4>
+        <p class="text-muted" style="font-size:.85rem;">用户通过你的链接充值，自动获得返点收益</p>
+      </div>
+    </div>
+
+    <!-- 代理等级卡片 -->
+    <div class="section-title" style="text-align:left;margin-bottom:1.5rem;">
+      <div class="badge badge-primary mb-2">代理等级</div>
+      <h2 style="font-size:1.5rem;font-weight:700;">选择你的代理级别</h2>
+    </div>
+    <div class="agent-grid">
+      <div class="agent-card">
+        <div class="agent-level"><span class="badge badge-cyan">二级代理</span></div>
+        <div class="agent-fee">¥299 <span>/ 一次性</span></div>
+        <div class="agent-rebate" style="color:var(--cyan);">💰 返点比例：15%</div>
+        <div class="perk-list">
+          <div class="perk">获得专属推广二维码与链接</div>
+          <div class="perk">用户永久绑定，后续充值持续返点</div>
+          <div class="perk">实时收益到账，微信/支付宝提现</div>
+          <div class="perk">专属推广素材下载</div>
+          <div class="perk">基础数据看板</div>
+        </div>
+        <button class="outline-btn" style="width:100%;justify-content:center;" onclick="openApply('agent2','¥299')">申请二级代理 →</button>
+      </div>
+      <div class="agent-card highlight">
+        <div class="agent-level"><span class="badge badge-grad">一级代理</span> <span class="badge badge-primary" style="font-size:.65rem;">更高收益</span></div>
+        <div class="agent-fee">¥999 <span>/ 一次性</span></div>
+        <div class="agent-rebate" style="color:var(--primary-light);">💰 返点比例：30%</div>
+        <div class="perk-list">
+          <div class="perk">获得专属推广二维码与链接</div>
+          <div class="perk">用户永久绑定，后续充值持续30%返点</div>
+          <div class="perk">实时收益到账，微信/支付宝提现</div>
+          <div class="perk">高级推广素材 + 视频物料</div>
+          <div class="perk">高级数据看板 + 用户来源分析</div>
+          <div class="perk">可发展下级代理，获取额外奖励</div>
+          <div class="perk">专属一对一客服支持</div>
+        </div>
+        <button class="grad-btn" style="width:100%;justify-content:center;" onclick="openApply('agent1','¥999')">申请一级代理 →</button>
+      </div>
+    </div>
+
+    <!-- 常见问题 -->
+    <div class="section-title" style="text-align:left;margin-bottom:1.5rem;">
+      <div class="badge badge-primary mb-2">常见问题</div>
+      <h2 style="font-size:1.5rem;font-weight:700;">代理常见疑问</h2>
+    </div>
+    <div class="qanda">
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)"><span>代理费是一次性的吗？不需要续费？</span><span>＋</span></div>
+        <div class="qa-a">是的，代理费一次性缴纳，永久有效。只要你推广的用户仍在平台消费，你就可以持续获得返点收益，无需续费。</div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)"><span>二级代理可以升级为一级代理吗？</span><span>＋</span></div>
+        <div class="qa-a">可以，升级时只需补缴差价（一级代理费 ¥999 - 已缴二级代理费 ¥299 = ¥700）即可升级，无需重新缴纳全额费用。</div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)"><span>返点什么时候到账？如何提现？</span><span>＋</span></div>
+        <div class="qa-a">用户完成充值后，返点实时计入你的推广后台收益余额。每月1日可申请提现，支持微信、支付宝，1-3个工作日到账。</div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)"><span>用户通过我的链接注册，是否永久绑定？</span><span>＋</span></div>
+        <div class="qa-a">是的，用户通过你的专属推广链接注册后，永久绑定在你名下。无论用户后续何时充值，你都可以持续获得对应比例的返点。</div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)"><span>一级代理可以发展下级代理吗？</span><span>＋</span></div>
+        <div class="qa-a">一级代理可以邀请他人成为二级代理，当下级代理推广用户完成充值时，一级代理还可额外获得分润奖励。具体规则登录后在推广后台查看。</div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- 申请弹窗 -->
+<div class="apply-modal-overlay" id="applyModal" style="display:none;" onclick="closeApply(event)">
+  <div class="apply-modal" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeApply()" style="position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--text-muted);font-size:1.25rem;cursor:pointer;width:2rem;height:2rem;display:flex;align-items:center;justify-content:center;border-radius:.375rem;">✕</button>
+    <div style="font-size:1.15rem;font-weight:700;margin-bottom:1.5rem;">申请代理</div>
+    <div id="applyInfo" style="background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.2);border-radius:.75rem;padding:1rem;margin-bottom:1.25rem;font-size:.9rem;"></div>
+    <div style="display:flex;flex-direction:column;gap:.85rem;">
+      <div>
+        <label class="form-label" style="font-size:.8rem;color:var(--text-muted);display:block;margin-bottom:.35rem;">联系方式（微信/手机号）*</label>
+        <input type="text" class="form-input" id="contactInfo" placeholder="便于我们与你取得联系"/>
+      </div>
+      <div>
+        <label class="form-label" style="font-size:.8rem;color:var(--text-muted);display:block;margin-bottom:.35rem;">申请理由（可选）</label>
+        <textarea class="textarea" rows="3" id="applyReason" placeholder="简单介绍你的推广渠道和资源..."></textarea>
+      </div>
+    </div>
+    <button class="grad-btn mt-4" style="width:100%;justify-content:center;" onclick="submitApply()">提交申请</button>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="index.html" class="logo"><div class="logo-icon">✨</div><span class="logo-text">漫绘星球</span></a>
+        <p>专业AI漫剧制作平台，用科技赋能创作。</p>
+        <div class="footer-contact"><span>📧 yi3858@163.com</span><span>💬 微信：yy889358</span></div>
+      </div>
+      <div class="footer-col"><h4>产品功能</h4><ul>
+        <li><a href="novel-to-comic.html">小说转漫剧</a></li>
+        <li><a href="video-to-anime.html">短剧转动漫</a></li>
+        <li><a href="showcase.html">作品案例</a></li>
+        <li><a href="pricing.html">积分充值</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 漫绘星球 · 保留所有权利</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>20));
+function toggleMobile(){document.getElementById('mobileNav').classList.toggle('open');document.body.style.overflow=document.getElementById('mobileNav').classList.contains('open')?'hidden':'';}
+function closeMobile(){document.getElementById('mobileNav').classList.remove('open');document.body.style.overflow='';}
+
+function toggleQA(el){
+  const ans=el.nextElementSibling;
+  const isOpen=ans.classList.contains('open');
+  ans.classList.toggle('open');
+  el.querySelector('span:last-child').textContent=isOpen?'＋':'－';
+}
+
+let applyTarget='';
+function openApply(level,fee){
+  applyTarget=level;
+  document.getElementById('applyInfo').innerHTML=`<strong>${level==='agent1'?'一级代理':'二级代理'}</strong> · 代理费 <strong style="color:var(--primary-light);">${fee}</strong><br/><span style="color:var(--text-muted);font-size:.8rem;">返点比例：${level==='agent1'?'30%':'15%'} · 用户永久绑定</span>`;
+  document.getElementById('applyModal').style.display='flex';
+  document.body.style.overflow='hidden';
+}
+function closeApply(e){
+  if(e&&e.target!==document.getElementById('applyModal'))return;
+  document.getElementById('applyModal').style.display='none';
+  document.body.style.overflow='';
+}
+function submitApply(){
+  const contact=document.getElementById('contactInfo').value.trim();
+  if(!contact){alert('请填写联系方式');return;}
+  document.getElementById('applyModal').style.display='none';
+  document.body.style.overflow='';
+  alert('申请已提交！\n\n我们将在1-3个工作日内通过你的联系方式与你取得联系，请保持手机畅通。');
+}
+</script>
+</body>
+</html>

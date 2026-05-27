@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>短剧转动漫 - 漫绘星球</title>
+  <meta name="description" content="上传实拍短剧视频，AI一键转换为精美动漫风格"/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .upload-zone{border:2px dashed var(--border-light);border-radius:var(--radius-lg);padding:3rem 2rem;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;position:relative}
+    .upload-zone:hover,.upload-zone.drag-over{border-color:var(--primary);background:rgba(139,92,246,.06)}
+    .upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+    .upload-icon{font-size:3rem;margin-bottom:1rem}
+    .upload-zone h4{font-size:1rem;font-weight:600;margin-bottom:.4rem}
+    .file-preview{background:var(--bg-card2);border:1px solid var(--border);border-radius:.75rem;padding:1rem;display:flex;align-items:center;gap:1rem}
+    .file-icon{width:3rem;height:3rem;border-radius:.5rem;background:var(--grad-cyan);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}
+    .file-info{flex:1;min-width:0}
+    .file-name{font-size:.9rem;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .file-size{font-size:.8rem;color:var(--text-muted);margin-top:.2rem}
+  </style>
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="logo">
+      <div class="logo-icon">✨</div>
+      <span class="logo-text">漫绘星球</span>
+    </a>
+    <div class="nav-links">
+      <a href="novel-to-comic.html" class="nav-link">📖 小说转漫剧</a>
+      <a href="video-to-anime.html" class="nav-link active">🎬 短剧转动漫</a>
+      <div class="nav-dropdown">
+        <span class="nav-link" style="cursor:pointer;">⭐ 创作中心 ▾</span>
+        <div class="nav-dropdown-menu">
+          <a href="showcase.html" class="nav-dropdown-item">🖼 作品案例</a>
+          <a href="trending.html" class="nav-dropdown-item">🔥 创作热点</a>
+          <a href="analysis.html" class="nav-dropdown-item">📊 爆款分析</a>
+        </div>
+      </div>
+      <a href="pricing.html" class="nav-link">👑 会员充值 <span class="hot-badge">HOT</span></a>
+      <a href="agent.html" class="nav-link">🤝 代理招商</a>
+    </div>
+    <div class="nav-actions">
+      <a href="login.html" class="nav-btn-ghost">登录</a>
+      <a href="register.html" class="nav-btn-primary">免费注册</a>
+      <button class="hamburger" onclick="toggleMobile()" aria-label="菜单">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="novel-to-comic.html" class="mobile-nav-link" onclick="closeMobile()">📖 小说转漫剧</a>
+  <a href="video-to-anime.html" class="mobile-nav-link" onclick="closeMobile()">🎬 短剧转动漫</a>
+  <a href="showcase.html" class="mobile-nav-link" onclick="closeMobile()">🖼 作品案例</a>
+  <a href="pricing.html" class="mobile-nav-link" onclick="closeMobile()">👑 会员充值</a>
+  <a href="agent.html" class="mobile-nav-link" onclick="closeMobile()">🤝 代理招商</a>
+  <div class="mobile-nav-actions">
+    <a href="login.html" class="outline-btn">登录</a>
+    <a href="register.html" class="grad-btn">免费注册</a>
+  </div>
+</div>
+
+<main class="studio-page">
+  <div class="container">
+    <div class="studio-header">
+      <div class="badge badge-cyan mb-3">🎬 短剧转动漫</div>
+      <h1 style="font-size:clamp(1.75rem,3vw,2.5rem);font-weight:800;margin-bottom:.75rem;">短剧一键转动漫风格</h1>
+      <p class="text-muted" style="max-width:520px;margin:0 auto;line-height:1.7;">上传实拍短剧视频 · AI风格转换 · 自动字幕 · 智能剪辑，5分钟出片</p>
+    </div>
+
+    <!-- 步骤条 -->
+    <div class="step-bar">
+      <div class="step-bar-item active" id="sbar1"><div class="snum">1</div>上传视频</div>
+      <div class="step-bar-sep"></div>
+      <div class="step-bar-item" id="sbar2"><div class="snum">2</div>选择风格</div>
+      <div class="step-bar-sep"></div>
+      <div class="step-bar-item" id="sbar3"><div class="snum">3</div>高级设置</div>
+      <div class="step-bar-sep"></div>
+      <div class="step-bar-item" id="sbar4"><div class="snum">4</div>AI转换</div>
+    </div>
+
+    <!-- Step 1 -->
+    <div id="step1">
+      <div class="studio-card">
+        <div class="studio-label"><span class="icon">🎬</span> 上传视频素材</div>
+        <div class="upload-zone" id="uploadZone" onclick="handleUploadClick()">
+          <input type="file" accept="video/*" id="fileInput" onchange="onFileSelect(this)"/>
+          <div class="upload-icon">📁</div>
+          <h4>点击或拖拽上传视频</h4>
+          <p class="text-muted" style="font-size:.875rem;margin-top:.4rem;">支持 MP4 / MOV / AVI，建议时长 30s-10min，文件不超过 500MB</p>
+        </div>
+        <div id="filePreview" style="display:none;margin-top:1rem;"></div>
+      </div>
+
+      <div class="studio-card">
+        <div class="studio-label"><span class="icon">📝</span> 作品信息</div>
+        <div style="display:flex;flex-direction:column;gap:.75rem;">
+          <div>
+            <label class="form-label mb-1" style="display:block;font-size:.8rem;color:var(--text-muted);">作品标题</label>
+            <input type="text" class="form-input" id="vtitle" placeholder="如：都市情感剧·相遇"/>
+          </div>
+          <div>
+            <label class="form-label mb-1" style="display:block;font-size:.8rem;color:var(--text-muted);">内容简介（可选）</label>
+            <textarea class="textarea" rows="3" id="vdesc" placeholder="简单描述视频内容，有助于AI更精准地转换风格..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <button class="grad-btn" style="background:var(--grad-cyan);" onclick="goStep2()">下一步：选择风格 →</button>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div id="step2" style="display:none;">
+      <div class="studio-card">
+        <div class="studio-label"><span class="icon">🎨</span> 动漫转换风格</div>
+        <div class="style-grid" id="styleGrid">
+          <div class="style-option selected" data-style="anime" onclick="selectStyle(this)">
+            <div style="font-size:1.75rem;">🎌</div>
+            <div class="sname">日漫风</div>
+            <div class="sdesc">细腻精美，情感丰富</div>
+          </div>
+          <div class="style-option" data-style="donghua" onclick="selectStyle(this)">
+            <div style="font-size:1.75rem;">🐉</div>
+            <div class="sname">国漫风</div>
+            <div class="sdesc">古韵今风，国产美学</div>
+          </div>
+          <div class="style-option" data-style="cyber" onclick="selectStyle(this)">
+            <div style="font-size:1.75rem;">🌆</div>
+            <div class="sname">赛博朋克</div>
+            <div class="sdesc">霓虹未来都市风</div>
+          </div>
+          <div class="style-option" data-style="inkwash" onclick="selectStyle(this)">
+            <div style="font-size:1.75rem;">🖌</div>
+            <div class="sname">水墨风</div>
+            <div class="sdesc">传统水墨意境</div>
+          </div>
+          <div class="style-option" data-style="western" onclick="selectStyle(this)">
+            <div style="font-size:1.75rem;">🦸</div>
+            <div class="sname">美漫风</div>
+            <div class="sdesc">欧美英雄漫画</div>
+          </div>
+          <div class="style-option" data-style="chibi" onclick="selectStyle(this)">
+            <div style="font-size:1.75rem;">🌟</div>
+            <div class="sname">Q版萌系</div>
+            <div class="sdesc">可爱圆润小人风</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="studio-card">
+        <div class="studio-label"><span class="icon">⚡</span> 输出分辨率</div>
+        <div class="res-grid">
+          <div class="res-option" data-res="720p" onclick="selectRes(this)">720P</div>
+          <div class="res-option selected" data-res="1080p" onclick="selectRes(this)">1080P</div>
+          <div class="res-option" data-res="4k" onclick="selectRes(this)">4K</div>
+        </div>
+        <div class="cost-box mt-3">
+          <div class="cost-row"><span>分辨率倍率</span><span id="resRate">×1.8（1080P）</span></div>
+          <div class="cost-row cost-total"><span>⚡ 预计消耗积分</span><span id="estCredits">约 80-200 积分</span></div>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <button class="outline-btn" onclick="goStep(1)">← 返回</button>
+        <button class="grad-btn" style="background:var(--grad-cyan);" onclick="goStep3()">下一步：高级设置 →</button>
+      </div>
+    </div>
+
+    <!-- Step 3: 高级设置 -->
+    <div id="step3" style="display:none;">
+      <div class="studio-card">
+        <div class="studio-label"><span class="icon">⚙️</span> 高级选项</div>
+        <div style="display:flex;flex-direction:column;gap:1.25rem;">
+          <label style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+            <div>
+              <div style="font-size:.9rem;font-weight:500;">自动字幕识别</div>
+              <div class="text-muted" style="font-size:.8rem;margin-top:.2rem;">AI识别视频语音，自动生成字幕</div>
+            </div>
+            <div class="toggle" id="toggle1" onclick="this.classList.toggle('on')" style="width:2.75rem;height:1.5rem;border-radius:9999px;background:var(--border);cursor:pointer;position:relative;transition:background .2s;"><div style="position:absolute;top:3px;left:3px;width:1.125rem;height:1.125rem;border-radius:9999px;background:#fff;transition:left .2s;"></div></div>
+          </label>
+          <hr style="border:none;border-top:1px solid var(--border);"/>
+          <label style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;">
+            <div>
+              <div style="font-size:.9rem;font-weight:500;">智能剪辑优化</div>
+              <div class="text-muted" style="font-size:.8rem;margin-top:.2rem;">AI自动识别精彩片段，优化节奏</div>
+            </div>
+            <div class="toggle" id="toggle2" onclick="this.classList.toggle('on')" style="width:2.75rem;height:1.5rem;border-radius:9999px;background:var(--border);cursor:pointer;position:relative;transition:background .2s;"><div style="position:absolute;top:3px;left:3px;width:1.125rem;height:1.125rem;border-radius:9999px;background:#fff;transition:left .2s;"></div></div>
+          </label>
+          <hr style="border:none;border-top:1px solid var(--border);"/>
+          <div>
+            <div style="font-size:.9rem;font-weight:500;margin-bottom:.5rem;">背景音乐</div>
+            <select class="form-input" style="background:rgba(255,255,255,.06);">
+              <option value="">不添加音乐</option>
+              <option value="epic">史诗热血</option>
+              <option value="romance">浪漫抒情</option>
+              <option value="funny">轻松欢快</option>
+              <option value="mystery">悬疑神秘</option>
+              <option value="original">保留原音</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <button class="outline-btn" onclick="goStep(2)">← 返回</button>
+        <button class="grad-btn" style="background:var(--grad-cyan);" onclick="goGenerate()">🚀 开始AI转换</button>
+      </div>
+    </div>
+
+    <!-- Step 4: 生成中 -->
+    <div id="step4" style="display:none;">
+      <div class="studio-card" style="text-align:center;padding:4rem 2rem;">
+        <div style="font-size:4rem;margin-bottom:1.5rem;" id="genIcon">🎬</div>
+        <h3 style="font-size:1.5rem;font-weight:700;margin-bottom:.75rem;" id="genTitle">AI正在转换中...</h3>
+        <p class="text-muted mb-6" id="genDesc">分析视频画面...</p>
+        <div style="background:var(--bg-card2);border-radius:9999px;height:.75rem;overflow:hidden;max-width:400px;margin:0 auto 1rem;">
+          <div id="progressBar" style="height:100%;background:var(--grad-cyan);border-radius:9999px;width:0;transition:width .5s;"></div>
+        </div>
+        <p class="text-muted" style="font-size:.875rem;" id="progressText">0%</p>
+      </div>
+    </div>
+
+    <!-- 完成 -->
+    <div id="stepDone" style="display:none;">
+      <div class="studio-card" style="text-align:center;padding:4rem 2rem;">
+        <div style="font-size:4rem;margin-bottom:1.5rem;">🎉</div>
+        <h3 style="font-size:1.75rem;font-weight:700;margin-bottom:.75rem;" class="grad-text">转换成功！</h3>
+        <p class="text-muted mb-6">你的动漫短片已生成完毕</p>
+        <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+          <a href="showcase.html" class="grad-btn">查看作品</a>
+          <button class="outline-btn" onclick="location.reload()">再上传一段</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="index.html" class="logo"><div class="logo-icon">✨</div><span class="logo-text">漫绘星球</span></a>
+        <p>专业AI漫剧制作平台，用科技赋能创作。</p>
+        <div class="footer-contact"><span>📧 yi3858@163.com</span></div>
+      </div>
+      <div class="footer-col"><h4>产品功能</h4><ul>
+        <li><a href="novel-to-comic.html">小说转漫剧</a></li>
+        <li><a href="video-to-anime.html">短剧转动漫</a></li>
+        <li><a href="showcase.html">作品案例</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>其他</h4><ul>
+        <li><a href="pricing.html">积分充值</a></li>
+        <li><a href="agent.html">代理招商</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 漫绘星球 · 保留所有权利</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+.toggle.on{background:var(--cyan)!important}
+.toggle.on div{left:calc(100% - 1.125rem - 3px)!important}
+</style>
+
+<script>
+window.addEventListener('scroll',()=>document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>20));
+function toggleMobile(){document.getElementById('mobileNav').classList.toggle('open');document.body.style.overflow=document.getElementById('mobileNav').classList.contains('open')?'hidden':'';}
+function closeMobile(){document.getElementById('mobileNav').classList.remove('open');document.body.style.overflow='';}
+
+function handleUploadClick(){}
+function onFileSelect(input){
+  if(!input.files||!input.files[0])return;
+  const f=input.files[0];
+  const prev=document.getElementById('filePreview');
+  prev.style.display='';
+  prev.innerHTML=`<div class="file-preview">
+    <div class="file-icon">🎬</div>
+    <div class="file-info">
+      <div class="file-name">${f.name}</div>
+      <div class="file-size">${(f.size/1024/1024).toFixed(1)} MB</div>
+    </div>
+    <button onclick="clearFile()" style="background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:1.2rem;">✕</button>
+  </div>`;
+}
+function clearFile(){
+  document.getElementById('fileInput').value='';
+  document.getElementById('filePreview').style.display='none';
+}
+
+const resRates={'720p':{rate:1.0,label:'×1.0（720P）'},'1080p':{rate:1.8,label:'×1.8（1080P）'},'4k':{rate:3.5,label:'×3.5（4K）'}};
+let selectedRes='1080p';
+function selectRes(el){
+  document.querySelectorAll('.res-option').forEach(e=>e.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedRes=el.dataset.res;
+  document.getElementById('resRate').textContent=resRates[selectedRes].label;
+}
+function selectStyle(el){
+  document.querySelectorAll('.style-option').forEach(e=>e.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function goStep(n){
+  ['step1','step2','step3','step4','stepDone'].forEach(id=>document.getElementById(id).style.display='none');
+  const map={1:'step1',2:'step2',3:'step3',4:'step4',5:'stepDone'};
+  document.getElementById(map[n]).style.display='';
+  for(let i=1;i<=4;i++){const el=document.getElementById('sbar'+i);el&&el.classList.toggle('active',i<=Math.min(n,4));}
+  window.scrollTo({top:160,behavior:'smooth'});
+}
+function goStep2(){
+  const t=document.getElementById('vtitle').value.trim();
+  if(!t){alert('请输入作品标题');return;}
+  goStep(2);
+}
+function goStep3(){goStep(3);}
+function goGenerate(){
+  goStep(4);
+  const steps=[
+    {p:12,i:'🔍',t:'分析视频内容...',d:'识别场景、人物、对话'},
+    {p:30,i:'🎨',t:'应用风格转换...',d:'逐帧转换为动漫画风'},
+    {p:55,i:'✂️',t:'智能剪辑优化...',d:'识别精彩片段，优化节奏'},
+    {p:75,i:'💬',t:'生成字幕...',d:'AI识别语音，自动添加字幕'},
+    {p:92,i:'🎵',t:'混音合成...',d:'合并音轨，输出最终视频'},
+    {p:100,i:'✅',t:'完成！',d:'保存作品中...'},
+  ];
+  let i=0;
+  const tick=()=>{
+    if(i>=steps.length){setTimeout(()=>goStep(5),800);return;}
+    const s=steps[i++];
+    document.getElementById('progressBar').style.width=s.p+'%';
+    document.getElementById('progressText').textContent=s.p+'%';
+    document.getElementById('genIcon').textContent=s.i;
+    document.getElementById('genTitle').textContent=s.t;
+    document.getElementById('genDesc').textContent=s.d;
+    setTimeout(tick,1300);
+  };
+  tick();
+}
+</script>
+</body>
+</html>

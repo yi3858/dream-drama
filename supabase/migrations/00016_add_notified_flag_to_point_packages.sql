@@ -1,0 +1,1 @@
+ALTER TABLE user_point_packages ADD COLUMN IF NOT EXISTS is_expiring_notified BOOLEAN DEFAULT false;

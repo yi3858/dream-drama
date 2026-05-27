@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>积分充值 - 漫绘星球</title>
+  <meta name="description" content="按需购买积分，灵活充值，积分永久有效"/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .tabs-wrap{display:flex;gap:.5rem;margin-bottom:2rem;background:var(--bg-card2);border:1px solid var(--border);border-radius:.75rem;padding:.3rem;width:fit-content;}
+    .tab-btn{padding:.5rem 1.5rem;border-radius:.55rem;font-size:.9rem;font-weight:500;color:var(--text-muted);cursor:pointer;transition:all .2s;border:none;background:none;}
+    .tab-btn.active{background:var(--grad);color:#fff;}
+    .pkg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.25rem;}
+    .pkg-card{background:var(--bg-card);border:2px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;display:flex;flex-direction:column;transition:all .25s;cursor:pointer;}
+    .pkg-card:hover{border-color:rgba(139,92,246,.4);box-shadow:var(--shadow-hover);}
+    .pkg-card.highlight{border-color:var(--primary);background:rgba(139,92,246,.06);}
+    .pkg-name{font-size:.95rem;font-weight:600;margin-bottom:.5rem;display:flex;align-items:center;justify-content:space-between;}
+    .pkg-price{font-size:2.25rem;font-weight:800;margin-bottom:1rem;color:#e2e8f0;}
+    .pkg-row{display:flex;align-items:center;justify-content:space-between;font-size:.8rem;padding:.3rem 0;border-top:1px solid var(--border);}
+    .pkg-row:first-of-type{border-top:none;}
+    .pkg-row span:first-child{color:var(--text-muted);}
+    .pkg-total{font-size:.9rem;font-weight:700;color:var(--primary-light);padding-top:.4rem;border-top:1px solid rgba(139,92,246,.2);margin-top:.25rem;}
+    .buy-btn{width:100%;padding:.7rem;border-radius:.625rem;font-size:.9rem;font-weight:600;border:none;cursor:pointer;transition:opacity .2s;margin-top:1rem;}
+    .buy-btn-primary{background:var(--grad);color:#fff;}
+    .buy-btn-outline{background:transparent;border:1.5px solid var(--border-light);color:#e2e8f0;}
+    .buy-btn:hover{opacity:.85;}
+    .cost-rule{background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.2);border-radius:.75rem;padding:1.25rem;margin-bottom:2rem;}
+    .rule-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-top:.75rem;}
+    .rule-item{font-size:.875rem;}
+    .rule-item .label{color:var(--text-muted);font-size:.8rem;margin-bottom:.3rem;}
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:flex;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px);}
+    .modal-box{background:var(--bg-card);border:1px solid var(--border-light);border-radius:1.25rem;padding:2rem;max-width:420px;width:100%;position:relative;}
+    .modal-title{font-size:1.15rem;font-weight:700;margin-bottom:1.5rem;}
+    .modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--text-muted);font-size:1.25rem;cursor:pointer;width:2rem;height:2rem;display:flex;align-items:center;justify-content:center;border-radius:.375rem;}
+    .modal-close:hover{color:#e2e8f0;background:rgba(255,255,255,.06);}
+    .pay-options{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin:1rem 0;}
+    .pay-opt{border:2px solid var(--border);border-radius:.75rem;padding:.85rem;cursor:pointer;display:flex;align-items:center;gap:.65rem;font-size:.9rem;font-weight:500;transition:border-color .2s;}
+    .pay-opt.selected{border-color:var(--primary);background:rgba(139,92,246,.1);}
+    .pay-opt:hover{border-color:rgba(139,92,246,.4);}
+    .ent-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.25rem;}
+  </style>
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="logo"><div class="logo-icon">✨</div><span class="logo-text">漫绘星球</span></a>
+    <div class="nav-links">
+      <a href="novel-to-comic.html" class="nav-link">📖 小说转漫剧</a>
+      <a href="video-to-anime.html" class="nav-link">🎬 短剧转动漫</a>
+      <div class="nav-dropdown">
+        <span class="nav-link" style="cursor:pointer;">⭐ 创作中心 ▾</span>
+        <div class="nav-dropdown-menu">
+          <a href="showcase.html" class="nav-dropdown-item">🖼 作品案例</a>
+        </div>
+      </div>
+      <a href="pricing.html" class="nav-link active">👑 会员充值 <span class="hot-badge">HOT</span></a>
+      <a href="agent.html" class="nav-link">🤝 代理招商</a>
+    </div>
+    <div class="nav-actions">
+      <a href="login.html" class="nav-btn-ghost">登录</a>
+      <a href="register.html" class="nav-btn-primary">免费注册</a>
+      <button class="hamburger" onclick="toggleMobile()" aria-label="菜单"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="novel-to-comic.html" class="mobile-nav-link" onclick="closeMobile()">📖 小说转漫剧</a>
+  <a href="video-to-anime.html" class="mobile-nav-link" onclick="closeMobile()">🎬 短剧转动漫</a>
+  <a href="showcase.html" class="mobile-nav-link" onclick="closeMobile()">🖼 作品案例</a>
+  <a href="pricing.html" class="mobile-nav-link" onclick="closeMobile()">👑 会员充值</a>
+  <a href="agent.html" class="mobile-nav-link" onclick="closeMobile()">🤝 代理招商</a>
+  <div class="mobile-nav-actions">
+    <a href="login.html" class="outline-btn">登录</a>
+    <a href="register.html" class="grad-btn">免费注册</a>
+  </div>
+</div>
+
+<main style="padding-top:5rem;padding-bottom:4rem;">
+  <div class="container" style="max-width:1100px;">
+    <!-- 标题 -->
+    <div class="text-center mb-8">
+      <div class="badge badge-amber mb-3">👑 积分套餐</div>
+      <h1 style="font-size:clamp(1.75rem,3vw,2.5rem);font-weight:800;margin-bottom:.75rem;">按需购买，灵活充值</h1>
+      <p class="text-muted" style="max-width:480px;margin:0 auto;line-height:1.7;">纯积分按量计费，无订阅绑定，积分永久有效，用多少扣多少</p>
+    </div>
+
+    <!-- 积分规则说明 -->
+    <div class="cost-rule">
+      <h3 style="font-size:.95rem;font-weight:600;display:flex;align-items:center;gap:.4rem;">✨ 积分扣费规则</h3>
+      <div class="rule-grid">
+        <div class="rule-item"><div class="label">扣费公式</div><div>10分（基础）+ 秒数 × 分辨率倍率</div></div>
+        <div class="rule-item">
+          <div class="label">分辨率倍率</div>
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+            <span style="background:rgba(148,163,184,.1);border-radius:.35rem;padding:.2rem .5rem;font-size:.8rem;">720P ×1.0</span>
+            <span style="background:rgba(148,163,184,.1);border-radius:.35rem;padding:.2rem .5rem;font-size:.8rem;">1080P ×1.8</span>
+            <span style="background:rgba(148,163,184,.1);border-radius:.35rem;padding:.2rem .5rem;font-size:.8rem;">4K ×3.5</span>
+          </div>
+        </div>
+        <div class="rule-item"><div class="label">失败退分</div><div style="color:var(--success);">✓ 生成失败全额退还积分</div></div>
+      </div>
+    </div>
+
+    <!-- 个人/企业 Tab -->
+    <div class="tabs-wrap">
+      <button class="tab-btn active" id="tabPersonal" onclick="switchTab('personal')">⚡ 个人套餐</button>
+      <button class="tab-btn" id="tabEnterprise" onclick="switchTab('enterprise')">👥 企业团队</button>
+    </div>
+
+    <!-- 个人套餐 -->
+    <div id="panelPersonal">
+      <div class="pkg-grid">
+        <div class="pkg-card" onclick="openModal({name:'体验包',price:9.9,credits:1000,bonus:0,bonusPct:0})">
+          <div class="pkg-name">体验包</div>
+          <div class="pkg-price">¥9.9</div>
+          <div class="pkg-row"><span>基础积分</span><span>1,000</span></div>
+          <div class="pkg-row pkg-total"><span>合计积分</span><span>1,000</span></div>
+          <div style="font-size:.75rem;color:var(--text-muted);margin-top:.5rem;">✓ 积分永久有效</div>
+          <button class="buy-btn buy-btn-outline">立即购买</button>
+        </div>
+        <div class="pkg-card highlight" onclick="openModal({name:'标准包',price:49,credits:5500,bonus:500,bonusPct:10})">
+          <div class="pkg-name">标准包 <span class="badge badge-grad" style="font-size:.65rem;padding:.15rem .45rem;">推荐</span></div>
+          <div class="pkg-price">¥49</div>
+          <div class="pkg-row"><span>基础积分</span><span>5,000</span></div>
+          <div class="pkg-row"><span style="color:var(--success);">🎁 赠送积分</span><span style="color:var(--success);">+500（10%）</span></div>
+          <div class="pkg-row pkg-total"><span>合计积分</span><span>5,500</span></div>
+          <div style="font-size:.75rem;color:var(--text-muted);margin-top:.5rem;">✓ 积分永久有效</div>
+          <button class="buy-btn buy-btn-primary">立即购买</button>
+        </div>
+        <div class="pkg-card highlight" onclick="openModal({name:'专业包',price:99,credits:12000,bonus:2000,bonusPct:20})">
+          <div class="pkg-name">专业包 <span class="badge badge-grad" style="font-size:.65rem;padding:.15rem .45rem;">推荐</span></div>
+          <div class="pkg-price">¥99</div>
+          <div class="pkg-row"><span>基础积分</span><span>10,000</span></div>
+          <div class="pkg-row"><span style="color:var(--success);">🎁 赠送积分</span><span style="color:var(--success);">+2,000（20%）</span></div>
+          <div class="pkg-row pkg-total"><span>合计积分</span><span>12,000</span></div>
+          <div style="font-size:.75rem;color:var(--text-muted);margin-top:.5rem;">✓ 积分永久有效</div>
+          <button class="buy-btn buy-btn-primary">立即购买</button>
+        </div>
+        <div class="pkg-card" onclick="openModal({name:'豪华包',price:299,credits:40000,bonus:10000,bonusPct:33})">
+          <div class="pkg-name">豪华包</div>
+          <div class="pkg-price">¥299</div>
+          <div class="pkg-row"><span>基础积分</span><span>30,000</span></div>
+          <div class="pkg-row"><span style="color:var(--success);">🎁 赠送积分</span><span style="color:var(--success);">+10,000（33%）</span></div>
+          <div class="pkg-row pkg-total"><span>合计积分</span><span>40,000</span></div>
+          <div style="font-size:.75rem;color:var(--text-muted);margin-top:.5rem;">✓ 积分永久有效</div>
+          <button class="buy-btn buy-btn-outline">立即购买</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 企业套餐 -->
+    <div id="panelEnterprise" style="display:none;">
+      <div class="ent-grid">
+        <div class="pkg-card" onclick="openModal({name:'企业基础版',price:500,credits:60000,bonus:10000,bonusPct:20,validity:365,members:5})">
+          <div class="pkg-name">企业基础版</div>
+          <div class="pkg-price">¥500</div>
+          <div class="pkg-row"><span>基础积分</span><span>50,000</span></div>
+          <div class="pkg-row"><span style="color:var(--success);">🎁 赠送（20%）</span><span style="color:var(--success);">+10,000</span></div>
+          <div class="pkg-row pkg-total"><span>合计积分</span><span>60,000</span></div>
+          <div class="pkg-row"><span>⏰ 有效期</span><span>365 天</span></div>
+          <div class="pkg-row"><span>👥 成员上限</span><span>5 人</span></div>
+          <button class="buy-btn buy-btn-outline mt-3">立即购买</button>
+        </div>
+        <div class="pkg-card highlight" onclick="openModal({name:'企业专业版',price:1500,credits:200000,bonus:50000,bonusPct:33,validity:365,members:20})">
+          <div class="pkg-name">企业专业版 <span class="badge badge-grad" style="font-size:.65rem;padding:.15rem .45rem;">最受欢迎</span></div>
+          <div class="pkg-price">¥1,500</div>
+          <div class="pkg-row"><span>基础积分</span><span>150,000</span></div>
+          <div class="pkg-row"><span style="color:var(--success);">🎁 赠送（33%）</span><span style="color:var(--success);">+50,000</span></div>
+          <div class="pkg-row pkg-total"><span>合计积分</span><span>200,000</span></div>
+          <div class="pkg-row"><span>⏰ 有效期</span><span>365 天</span></div>
+          <div class="pkg-row"><span>👥 成员上限</span><span>20 人</span></div>
+          <div class="pkg-row"><span>🛡 专属权益</span><span>优先生成队列</span></div>
+          <button class="buy-btn buy-btn-primary mt-3">立即购买</button>
+        </div>
+        <div class="pkg-card" onclick="openModal({name:'企业旗舰版',price:5000,credits:800000,bonus:300000,bonusPct:60,validity:365,members:99})">
+          <div class="pkg-name">企业旗舰版</div>
+          <div class="pkg-price">¥5,000</div>
+          <div class="pkg-row"><span>基础积分</span><span>500,000</span></div>
+          <div class="pkg-row"><span style="color:var(--success);">🎁 赠送（60%）</span><span style="color:var(--success);">+300,000</span></div>
+          <div class="pkg-row pkg-total"><span>合计积分</span><span>800,000</span></div>
+          <div class="pkg-row"><span>⏰ 有效期</span><span>365 天</span></div>
+          <div class="pkg-row"><span>👥 成员上限</span><span>不限</span></div>
+          <div class="pkg-row"><span>🛡 专属服务</span><span>专属客服+API接入</span></div>
+          <button class="buy-btn buy-btn-outline mt-3">立即购买</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- 购买弹窗 -->
+<div class="modal-overlay" id="modal" style="display:none;" onclick="closeModal(event)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title">确认购买</div>
+    <div id="modalContent"></div>
+    <div class="pay-options">
+      <div class="pay-opt selected" onclick="selectPay(this,'wechat')">
+        <span style="font-size:1.5rem;">💚</span> 微信支付
+      </div>
+      <div class="pay-opt" onclick="selectPay(this,'alipay')">
+        <span style="font-size:1.5rem;">💙</span> 支付宝
+      </div>
+    </div>
+    <button class="buy-btn buy-btn-primary" id="confirmBtn" onclick="confirmPay()">确认支付</button>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="index.html" class="logo"><div class="logo-icon">✨</div><span class="logo-text">漫绘星球</span></a>
+        <p>专业AI漫剧制作平台，让每个故事都能绽放光彩。</p>
+        <div class="footer-contact"><span>📧 yi3858@163.com</span></div>
+      </div>
+      <div class="footer-col"><h4>产品功能</h4><ul>
+        <li><a href="novel-to-comic.html">小说转漫剧</a></li>
+        <li><a href="video-to-anime.html">短剧转动漫</a></li>
+        <li><a href="showcase.html">作品案例</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>其他</h4><ul>
+        <li><a href="agent.html">代理招商</a></li>
+        <li><a href="login.html">个人中心</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 漫绘星球 · 保留所有权利</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>20));
+function toggleMobile(){document.getElementById('mobileNav').classList.toggle('open');document.body.style.overflow=document.getElementById('mobileNav').classList.contains('open')?'hidden':'';}
+function closeMobile(){document.getElementById('mobileNav').classList.remove('open');document.body.style.overflow='';}
+
+function switchTab(tab){
+  document.getElementById('tabPersonal').classList.toggle('active',tab==='personal');
+  document.getElementById('tabEnterprise').classList.toggle('active',tab==='enterprise');
+  document.getElementById('panelPersonal').style.display=tab==='personal'?'':'none';
+  document.getElementById('panelEnterprise').style.display=tab==='enterprise'?'':'none';
+}
+
+let currentPkg=null;
+let selectedPayMethod='wechat';
+
+function openModal(pkg){
+  currentPkg=pkg;
+  const total=(pkg.credits||0)+(pkg.bonus||0);
+  document.getElementById('modalContent').innerHTML=`
+    <div style="background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.2);border-radius:.75rem;padding:1rem;margin-bottom:1rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem;">
+        <span style="font-weight:600;">${pkg.name}</span>
+        <span style="font-size:1.25rem;font-weight:700;color:var(--primary-light);">¥${pkg.price}</span>
+      </div>
+      <div style="font-size:.875rem;color:var(--text-muted);">获得 <strong style="color:#e2e8f0;">${total.toLocaleString()}</strong> 积分${pkg.bonus?` <span style="color:var(--success);">（含赠送 ${pkg.bonus.toLocaleString()} 积分）</span>`:''}
+      </div>
+    </div>
+    <p style="font-size:.875rem;font-weight:500;margin-bottom:.75rem;color:var(--text-muted);">选择支付方式</p>
+  `;
+  document.getElementById('confirmBtn').textContent=`确认支付 ¥${pkg.price}`;
+  document.getElementById('modal').style.display='flex';
+  document.body.style.overflow='hidden';
+}
+function closeModal(e){
+  if(e&&e.target!==document.getElementById('modal'))return;
+  document.getElementById('modal').style.display='none';
+  document.body.style.overflow='';
+}
+function selectPay(el,method){
+  document.querySelectorAll('.pay-opt').forEach(e=>e.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedPayMethod=method;
+}
+function confirmPay(){
+  document.getElementById('modal').style.display='none';
+  document.body.style.overflow='';
+  alert('请先登录账号后完成支付！\n\n点击确定前往登录页面。');
+  window.location.href='login.html';
+}
+</script>
+</body>
+</html>

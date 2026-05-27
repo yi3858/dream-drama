@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>漫绘星球 - AI漫剧制作聚合平台</title>
+  <meta name="description" content="漫绘星球 - 专业AI漫剧制作平台，小说一键转漫剧，短剧智能转动漫，开启你的创作新纪元"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- ===== 导航栏 ===== -->
+<nav class="navbar" id="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="logo">
+      <div class="logo-icon">✨</div>
+      <span class="logo-text">漫绘星球</span>
+    </a>
+    <div class="nav-links">
+      <a href="novel-to-comic.html" class="nav-link">📖 小说转漫剧</a>
+      <a href="video-to-anime.html" class="nav-link">🎬 短剧转动漫</a>
+      <div class="nav-dropdown">
+        <span class="nav-link" style="cursor:pointer;">⭐ 创作中心 ▾</span>
+        <div class="nav-dropdown-menu">
+          <a href="showcase.html" class="nav-dropdown-item">🖼 作品案例</a>
+          <a href="trending.html" class="nav-dropdown-item">🔥 创作热点</a>
+          <a href="analysis.html" class="nav-dropdown-item">📊 爆款分析</a>
+        </div>
+      </div>
+      <a href="pricing.html" class="nav-link">👑 会员充值 <span class="hot-badge">HOT</span></a>
+      <a href="agent.html" class="nav-link">🤝 代理招商</a>
+    </div>
+    <div class="nav-actions">
+      <a href="login.html" class="nav-btn-ghost">登录</a>
+      <a href="register.html" class="nav-btn-primary">免费注册</a>
+      <button class="hamburger" onclick="toggleMobile()" aria-label="菜单">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- 移动端菜单 -->
+<div class="mobile-nav" id="mobileNav">
+  <a href="novel-to-comic.html" class="mobile-nav-link" onclick="closeMobile()">📖 小说转漫剧</a>
+  <a href="video-to-anime.html" class="mobile-nav-link" onclick="closeMobile()">🎬 短剧转动漫</a>
+  <a href="showcase.html" class="mobile-nav-link" onclick="closeMobile()">🖼 作品案例</a>
+  <a href="pricing.html" class="mobile-nav-link" onclick="closeMobile()">👑 会员充值</a>
+  <a href="agent.html" class="mobile-nav-link" onclick="closeMobile()">🤝 代理招商</a>
+  <div class="mobile-nav-actions">
+    <a href="login.html" class="outline-btn">登录</a>
+    <a href="register.html" class="grad-btn">免费注册</a>
+  </div>
+</div>
+
+<!-- ===== 主页 Hero ===== -->
+<section class="hero">
+  <div class="hero-glow" style="top:15%;left:18%;width:28rem;height:28rem;background:rgba(139,92,246,.14)"></div>
+  <div class="hero-glow" style="bottom:15%;right:15%;width:22rem;height:22rem;background:rgba(34,211,238,.1)"></div>
+  <div class="hero-glow" style="top:60%;left:50%;width:16rem;height:16rem;background:rgba(99,102,241,.1)"></div>
+  <div class="hero-content container">
+    <div class="badge badge-primary mb-4" style="margin:0 auto 1.5rem;">✨ 专业AI漫剧制作平台</div>
+    <h1>让每个故事<br/><span class="grad-text">都能成为漫剧</span></h1>
+    <p class="hero-sub">AI赋能创作，一键将小说或短剧转为个性化动漫视频。<br/>无需专业技能，AI帮你完成分镜、绘图、剪辑全流程。</p>
+    <div class="hero-btns">
+      <a href="novel-to-comic.html" class="grad-btn" style="padding:.85rem 2.25rem;font-size:1.05rem;">🚀 立即创作</a>
+      <a href="showcase.html" class="outline-btn" style="padding:.85rem 2.25rem;font-size:1.05rem;">▶ 观看作品</a>
+    </div>
+    <div class="hero-tags">
+      <span class="hero-tag">新海诚风</span>
+      <span class="hero-tag">宫崎骏风</span>
+      <span class="hero-tag">赛博朋克</span>
+      <span class="hero-tag">国风水墨</span>
+      <span class="hero-tag">像素复古</span>
+      <span class="hero-tag">Q版萌系</span>
+      <span class="hero-tag">油画质感</span>
+      <span class="hero-tag">美漫英雄</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 数据统计 ===== -->
+<div class="stats-bar">
+  <div class="container">
+    <div class="grid-4">
+      <div class="stat-item"><div class="stat-num">10万+</div><div class="stat-label">创作者</div></div>
+      <div class="stat-item"><div class="stat-num">50万+</div><div class="stat-label">生成作品</div></div>
+      <div class="stat-item"><div class="stat-num">8</div><div class="stat-label">艺术风格</div></div>
+      <div class="stat-item"><div class="stat-num">4步</div><div class="stat-label">极速出片</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 两大引擎 ===== -->
+<section class="section">
+  <div class="container">
+    <div class="section-title">
+      <div class="badge badge-primary mb-3">核心能力</div>
+      <h2>两大创作引擎</h2>
+      <p>小说转漫剧 · 短剧转动漫，一站式AI漫剧创作</p>
+    </div>
+    <div class="grid-2" style="max-width:900px;margin:0 auto;">
+      <div class="card feature-card">
+        <div class="feature-icon" style="background:var(--grad-purple);">📖</div>
+        <h3>小说转漫剧</h3>
+        <p>输入小说文本，AI自动分镜拆解、绘制分镜画面、合成动态漫剧视频</p>
+        <div class="tag-list">
+          <span class="tag tag-purple">自动分镜</span>
+          <span class="tag tag-purple">AI绘图</span>
+          <span class="tag tag-purple">视频合成</span>
+        </div>
+        <a href="novel-to-comic.html" class="grad-btn" style="text-align:center;justify-content:center;">开始创作 →</a>
+      </div>
+      <div class="card feature-card">
+        <div class="feature-icon" style="background:var(--grad-cyan);">🎬</div>
+        <h3>短剧转动漫</h3>
+        <p>上传实拍短剧素材，一键转换为精美动漫风格，自动剪辑+字幕生成</p>
+        <div class="tag-list">
+          <span class="tag tag-cyan">风格转换</span>
+          <span class="tag tag-cyan">智能剪辑</span>
+          <span class="tag tag-cyan">自动字幕</span>
+        </div>
+        <a href="video-to-anime.html" class="grad-btn" style="background:var(--grad-cyan);text-align:center;justify-content:center;">开始创作 →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 4步流程 ===== -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-title">
+      <div class="badge badge-cyan mb-3">简单流程</div>
+      <h2>4步完成你的漫剧</h2>
+    </div>
+    <div class="step-grid" style="max-width:900px;margin:0 auto;">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <h4>输入内容</h4>
+        <p>粘贴小说文本或上传视频素材</p>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <h4>选择风格</h4>
+        <p>8种精美动漫风格任你选择</p>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <h4>AI生成</h4>
+        <p>自动分镜、绘图、合成视频</p>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <h4>发布分享</h4>
+        <p>一键导出，多端分享传播</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 精选作品 ===== -->
+<section class="section">
+  <div class="container">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2.5rem;flex-wrap:wrap;gap:1rem;">
+      <div>
+        <div class="badge badge-primary mb-2">精选作品</div>
+        <h2 style="font-size:1.875rem;font-weight:700;">创作者作品展示</h2>
+      </div>
+      <a href="showcase.html" style="color:var(--primary-light);font-size:.9rem;display:flex;align-items:center;gap:.3rem;">查看全部 →</a>
+    </div>
+    <div class="grid-3">
+      <div class="card work-card">
+        <div class="work-thumb">🏔</div>
+        <div class="work-body">
+          <div style="margin-bottom:.5rem;display:flex;gap:.4rem;flex-wrap:wrap;">
+            <span class="badge badge-primary" style="font-size:.7rem;padding:.15rem .5rem;">小说转漫剧</span>
+            <span class="badge badge-grad" style="font-size:.7rem;padding:.15rem .5rem;">⭐ 精选</span>
+          </div>
+          <div class="work-title">修仙之路：逆天改命</div>
+          <div class="work-meta">国风水墨 · 👁 12.4k</div>
+        </div>
+      </div>
+      <div class="card work-card">
+        <div class="work-thumb">🌃</div>
+        <div class="work-body">
+          <div style="margin-bottom:.5rem;display:flex;gap:.4rem;flex-wrap:wrap;">
+            <span class="badge badge-cyan" style="font-size:.7rem;padding:.15rem .5rem;">短剧转动漫</span>
+            <span class="badge badge-grad" style="font-size:.7rem;padding:.15rem .5rem;">⭐ 精选</span>
+          </div>
+          <div class="work-title">赛博都市：霓虹之夜</div>
+          <div class="work-meta">赛博朋克 · 👁 9.8k</div>
+        </div>
+      </div>
+      <div class="card work-card">
+        <div class="work-thumb">🌸</div>
+        <div class="work-body">
+          <div style="margin-bottom:.5rem;display:flex;gap:.4rem;flex-wrap:wrap;">
+            <span class="badge badge-primary" style="font-size:.7rem;padding:.15rem .5rem;">小说转漫剧</span>
+            <span class="badge badge-grad" style="font-size:.7rem;padding:.15rem .5rem;">⭐ 精选</span>
+          </div>
+          <div class="work-title">樱花下的约定</div>
+          <div class="work-meta">新海诚风 · 👁 7.6k</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 优势特点 ===== -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-title">
+      <div class="badge badge-primary mb-3">平台优势</div>
+      <h2>为什么选择漫绘星球</h2>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <div style="font-size:2rem;margin-bottom:1rem;">⚡</div>
+        <h3 style="font-size:1.15rem;margin-bottom:.5rem;">极速生成</h3>
+        <p class="text-muted" style="font-size:.9rem;line-height:1.65;">平均3分钟生成一段漫剧，先进AI加速推理，高效产出高质量内容。</p>
+      </div>
+      <div class="card">
+        <div style="font-size:2rem;margin-bottom:1rem;">🎨</div>
+        <h3 style="font-size:1.15rem;margin-bottom:.5rem;">多风格支持</h3>
+        <p class="text-muted" style="font-size:.9rem;line-height:1.65;">8种精美动漫风格，从国风水墨到赛博朋克，满足不同创作需求。</p>
+      </div>
+      <div class="card">
+        <div style="font-size:2rem;margin-bottom:1rem;">🛡</div>
+        <h3 style="font-size:1.15rem;margin-bottom:.5rem;">合规保障</h3>
+        <p class="text-muted" style="font-size:.9rem;line-height:1.65;">AI生成内容全程标注，内置版权风险检测，保障创作合法合规。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="section">
+  <div class="container">
+    <div style="background:linear-gradient(135deg,rgba(139,92,246,.15),rgba(34,211,238,.1));border:1px solid rgba(139,92,246,.3);border-radius:1.5rem;padding:4rem 2rem;text-align:center;">
+      <h2 style="font-size:clamp(1.75rem,3.5vw,2.5rem);font-weight:700;margin-bottom:1rem;">准备好开始了吗？</h2>
+      <p class="text-muted" style="max-width:500px;margin:0 auto 2rem;line-height:1.7;">立即注册，获得免费体验积分，开启你的AI漫剧创作之旅</p>
+      <a href="register.html" class="grad-btn" style="padding:.9rem 2.5rem;font-size:1.05rem;">🎉 免费注册 获取50积分</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 页脚 ===== -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">
+          <div class="logo-icon">✨</div>
+          <span class="logo-text">漫绘星球</span>
+        </a>
+        <p>专业AI漫剧制作平台，用科技赋能创作，让每个故事都能绽放光彩。</p>
+        <div class="footer-contact">
+          <span>📧 yi3858@163.com</span>
+          <span>💬 微信客服：yy889358</span>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>产品功能</h4>
+        <ul>
+          <li><a href="novel-to-comic.html">小说转漫剧</a></li>
+          <li><a href="video-to-anime.html">短剧转动漫</a></li>
+          <li><a href="showcase.html">作品案例</a></li>
+          <li><a href="pricing.html">积分充值</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>会员与代理</h4>
+        <ul>
+          <li><a href="pricing.html">积分套餐</a></li>
+          <li><a href="agent.html">代理招商</a></li>
+          <li><a href="login.html">个人中心</a></li>
+          <li><a href="showcase.html">精选作品</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>支持与帮助</h4>
+        <ul>
+          <li><a href="#">常见问题</a></li>
+          <li><a href="#">联系客服</a></li>
+          <li><a href="#">用户协议</a></li>
+          <li><a href="#">隐私政策</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 漫绘星球 · 保留所有权利 | 由AI驱动 · 合规创作</p>
+      <p>⚠️ 本平台所有AI生成内容均携带AI标识 · 请遵守相关法律法规合规使用</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>20);
+});
+function toggleMobile(){
+  document.getElementById('mobileNav').classList.toggle('open');
+  document.body.style.overflow=document.getElementById('mobileNav').classList.contains('open')?'hidden':'';
+}
+function closeMobile(){
+  document.getElementById('mobileNav').classList.remove('open');
+  document.body.style.overflow='';
+}
+</script>
+</body>
+</html>

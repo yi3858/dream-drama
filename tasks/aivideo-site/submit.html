@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>生成视频 - AI视频生成平台</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    /* ===== 画风选择器 ===== */
+    .style-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .style-card {
+      border: 2px solid var(--slate-200);
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color .18s, box-shadow .18s, transform .18s;
+      background: var(--white);
+      position: relative;
+    }
+    .style-card:hover {
+      border-color: var(--primary);
+      box-shadow: 0 4px 16px rgba(79,70,229,.18);
+      transform: translateY(-2px);
+    }
+    .style-card.active {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px var(--primary), 0 4px 16px rgba(79,70,229,.2);
+    }
+    .style-card.active .style-check {
+      opacity: 1;
+    }
+    .style-img-wrap {
+      width: 100%;
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      background: var(--slate-100);
+    }
+    .style-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .3s ease;
+      display: block;
+    }
+    .style-card:hover .style-img-wrap img { transform: scale(1.06); }
+    .style-info {
+      padding: 8px 10px 10px;
+    }
+    .style-name {
+      font-size: .875rem;
+      font-weight: 700;
+      color: var(--slate-800);
+      margin-bottom: 2px;
+    }
+    .style-desc {
+      font-size: .72rem;
+      color: var(--slate-500);
+      line-height: 1.4;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+    .style-check {
+      position: absolute;
+      top: 7px; right: 7px;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .75rem;
+      opacity: 0;
+      transition: opacity .15s;
+      box-shadow: 0 2px 6px rgba(79,70,229,.4);
+    }
+
+    @media (max-width: 767px) {
+      .style-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .style-name  { font-size: .8125rem; }
+    }
+    @media (max-width: 400px) {
+      .style-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- 导航 -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="logo"><div class="logo-icon">▶</div><span>AI视频生成</span></a>
+    <div class="nav-links">
+      <a href="index.html"   class="nav-link">首页</a>
+      <a href="submit.html"  class="nav-link active">生成视频</a>
+      <a href="result.html"  class="nav-link">我的任务</a>
+      <a href="profile.html" class="nav-link">个人中心</a>
+    </div>
+    <div class="nav-actions">
+      <a href="profile.html" class="nav-user">
+        <div class="avatar">张</div>
+        <span>我的账户</span>
+      </a>
+    </div>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="菜单"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html"   class="nav-link" onclick="closeMenu()">首页</a>
+  <a href="submit.html"  class="nav-link active" onclick="closeMenu()">生成视频</a>
+  <a href="result.html"  class="nav-link" onclick="closeMenu()">我的任务</a>
+  <a href="profile.html" class="nav-link" onclick="closeMenu()">个人中心</a>
+</div>
+
+<!-- 主内容 -->
+<main class="page-main">
+  <div class="container" style="max-width: 820px;">
+
+    <!-- 步骤条 -->
+    <div class="steps mb-4">
+      <div class="step-item active" id="s1"><div class="step-num">1</div><span class="step-label">填写参数</span></div>
+      <div class="step-sep"></div>
+      <div class="step-item" id="s2"><div class="step-num">2</div><span class="step-label">确认提交</span></div>
+      <div class="step-sep"></div>
+      <div class="step-item" id="s3"><div class="step-num">3</div><span class="step-label">AI生成中</span></div>
+    </div>
+
+    <!-- Step 1: 填写参数 -->
+    <div id="panel1">
+      <!-- 积分提示 -->
+      <div style="display:flex;align-items:center;justify-content:space-between;background:var(--primary-l);border:1px solid #C7D2FE;border-radius:var(--radius);padding:12px 16px;margin-bottom:20px;flex-wrap:wrap;gap:8px;">
+        <span style="font-size:.875rem;color:var(--primary);">⚡ 当前积分：<strong id="balanceShow">1,250</strong></span>
+        <span style="font-size:.875rem;color:var(--primary);">本次预计消耗：<strong id="costShow">—</strong></span>
+        <a href="profile.html" style="font-size:.8rem;color:var(--primary);text-decoration:underline;">充值积分 →</a>
+      </div>
+
+      <div class="card card-lg" style="margin-bottom: 20px;">
+        <!-- 提示词 -->
+        <div class="form-group mb-4">
+          <label class="form-label">视频提示词 <span class="req">*</span></label>
+          <textarea class="form-textarea" id="prompt" rows="5"
+            placeholder="详细描述你想要生成的视频内容&#10;&#10;示例：一只白色的猫咪在向日葵田里奔跑，阳光明媚，镜头慢速跟随，电影风格，4K超清"></textarea>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:5px;">
+            <span class="form-hint">建议30~200字，描述越详细，生成效果越好</span>
+            <span class="text-xs text-muted" id="promptCount">0 / 500</span>
+          </div>
+        </div>
+
+        <!-- 画风选择 -->
+        <div class="form-group mb-4">
+          <label class="form-label">画面风格 <span class="req">*</span></label>
+          <p class="form-hint mb-2">点击选择一种画风，AI将按该风格生成视频</p>
+          <div id="styleGrid" class="style-grid"></div>
+          <input type="hidden" id="selectedStyle" value=""/>
+        </div>
+
+        <!-- 风格模板快选 -->
+        <div class="form-group mb-4">
+          <label class="form-label">追加风格关键词（可选，点击叠加到提示词）</label>
+          <div class="option-group" id="tplGroup">
+            <button class="option-btn" onclick="addTpl(this,'电影级画质，专业摄影，景深效果，色调温暖')">🎬 电影感</button>
+            <button class="option-btn" onclick="addTpl(this,'慢镜头，空镜，自然光')">🌅 慢镜头</button>
+            <button class="option-btn" onclick="addTpl(this,'镜头跟随主体，动态运动')">🏃 动态跟随</button>
+            <button class="option-btn" onclick="addTpl(this,'航拍俯视，宏观壮阔')">🚁 航拍视角</button>
+            <button class="option-btn" onclick="addTpl(this,'特写细节，微距')">🔍 特写微距</button>
+            <button class="option-btn" onclick="addTpl(this,'环境音效，沉浸感')">🎵 沉浸氛围</button>
+          </div>
+        </div>
+
+        <!-- 分辨率 -->
+        <div class="form-group mb-4">
+          <label class="form-label">输出分辨率 <span class="req">*</span></label>
+          <div class="option-group" id="resGroup">
+            <button class="option-btn" data-res="720p"  data-base="50"  onclick="selectOpt(this,'resGroup')" >720P <span style="font-size:.75rem;opacity:.7;">标准</span></button>
+            <button class="option-btn active" data-res="1080p" data-base="90"  onclick="selectOpt(this,'resGroup')" >1080P <span style="font-size:.75rem;opacity:.7;">推荐</span></button>
+            <button class="option-btn" data-res="4k"    data-base="180" onclick="selectOpt(this,'resGroup')" >4K <span style="font-size:.75rem;opacity:.7;">高清</span></button>
+          </div>
+          <div class="form-hint mt-1">
+            分辨率越高，积分消耗越多。720P=1×基础积分；1080P=1.8×；4K=3.6×
+          </div>
+        </div>
+
+        <!-- 视频时长 -->
+        <div class="form-group mb-4">
+          <label class="form-label">视频时长 <span class="req">*</span></label>
+          <div class="option-group" id="durGroup">
+            <button class="option-btn active" data-dur="5"  data-mult="1"   onclick="selectOpt(this,'durGroup')">5秒</button>
+            <button class="option-btn"        data-dur="10" data-mult="1.8" onclick="selectOpt(this,'durGroup')">10秒</button>
+            <button class="option-btn"        data-dur="15" data-mult="2.5" onclick="selectOpt(this,'durGroup')">15秒</button>
+            <button class="option-btn"        data-dur="30" data-mult="4.5" onclick="selectOpt(this,'durGroup')">30秒</button>
+            <button class="option-btn"        data-dur="60" data-mult="8"   onclick="selectOpt(this,'durGroup')">60秒</button>
+          </div>
+        </div>
+
+        <!-- 视频比例 -->
+        <div class="form-group mb-4">
+          <label class="form-label">画面比例</label>
+          <div class="option-group" id="ratioGroup">
+            <button class="option-btn active" data-ratio="16:9" onclick="selectOpt(this,'ratioGroup')">横屏 16:9</button>
+            <button class="option-btn" data-ratio="9:16" onclick="selectOpt(this,'ratioGroup')">竖屏 9:16 <span style="font-size:.7rem;opacity:.7;">手机</span></button>
+            <button class="option-btn" data-ratio="1:1"  onclick="selectOpt(this,'ratioGroup')">方形 1:1</button>
+          </div>
+        </div>
+
+        <!-- 高级选项 -->
+        <div>
+          <button onclick="toggleAdv()" style="font-size:.875rem;color:var(--primary);background:none;border:none;cursor:pointer;padding:0;font-weight:600;" id="advBtn">
+            ▸ 展开高级选项
+          </button>
+          <div id="advPanel" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid var(--slate-200);">
+            <div class="grid-2" style="gap:16px;">
+              <div class="form-group">
+                <label class="form-label">帧率</label>
+                <select class="form-select" id="fps">
+                  <option value="24">24fps（电影感）</option>
+                  <option value="30" selected>30fps（标准）</option>
+                  <option value="60">60fps（流畅）</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">生成种子（可选）</label>
+                <input type="number" class="form-input" id="seed" placeholder="留空则随机"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">镜头运动</label>
+                <select class="form-select" id="camera">
+                  <option value="auto">AI自动</option>
+                  <option value="static">固定镜头</option>
+                  <option value="pan">水平移动</option>
+                  <option value="zoom_in">推进（Zoom In）</option>
+                  <option value="zoom_out">拉远（Zoom Out）</option>
+                  <option value="rotate">环绕旋转</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">反向提示词（排除元素）</label>
+                <input type="text" class="form-input" id="negPrompt" placeholder="如：模糊,变形,低质量"/>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 费用预估 -->
+      <div class="card card-sm mb-4" id="costCard" style="background: var(--slate-50);">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+          <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+            <div><span class="text-xs text-muted">分辨率</span><br/><span class="font-b" id="costRes">1080P</span></div>
+            <div><span class="text-xs text-muted">时长</span><br/><span class="font-b" id="costDur">5秒</span></div>
+            <div><span class="text-xs text-muted">当前余额</span><br/><span class="font-b" id="costBalance">1,250 积分</span></div>
+          </div>
+          <div style="text-align:right;">
+            <div class="text-xs text-muted">本次消耗</div>
+            <div style="font-size:1.375rem;font-weight:800;color:var(--primary);" id="costNum">90 积分</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="errMsg" style="display:none;background:var(--red-l);border:1px solid #FECACA;border-radius:var(--radius);padding:12px 16px;font-size:.875rem;color:#991B1B;margin-bottom:14px;"></div>
+
+      <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;">
+        <button class="btn btn-ghost" onclick="clearForm()">清空重填</button>
+        <button class="btn btn-primary btn-lg" id="nextBtn" onclick="goStep2()">预览并提交 →</button>
+      </div>
+    </div>
+
+    <!-- Step 2: 确认提交 -->
+    <div id="panel2" style="display:none;">
+      <div class="card card-lg mb-4">
+        <h3 style="font-size:1.125rem;font-weight:700;margin-bottom:18px;">确认生成参数</h3>
+        <div id="confirmInfo" style="display:flex;flex-direction:column;gap:12px;"></div>
+      </div>
+
+      <div style="background:var(--amber-l);border:1px solid #FDE68A;border-radius:var(--radius);padding:12px 16px;font-size:.875rem;color:#92400E;margin-bottom:16px;">
+        ⚠️ 提交后将扣除 <strong id="confirmCost"></strong> 积分。生成失败时全额退还。
+      </div>
+
+      <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;">
+        <button class="btn btn-ghost" onclick="goStep(1)">← 返回修改</button>
+        <button class="btn btn-primary btn-lg" id="submitBtn" onclick="doSubmit()">确认提交生成</button>
+      </div>
+    </div>
+
+    <!-- Step 3: 提交成功，跳转生成 -->
+    <div id="panel3" style="display:none;">
+      <div class="card card-lg" style="text-align:center;padding:56px 24px;">
+        <div style="font-size:3.5rem;margin-bottom:16px;">✅</div>
+        <h3 style="font-size:1.375rem;font-weight:700;margin-bottom:8px;">任务已成功提交！</h3>
+        <p class="text-muted mb-6">AI正在排队处理，通常30~120秒内完成。你可以关闭此页面，稍后在任务列表查看结果。</p>
+        <div style="background:var(--slate-50);border-radius:var(--radius);padding:14px 20px;margin-bottom:24px;font-size:.875rem;">
+          任务ID：<strong id="taskIdShow"></strong>
+        </div>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+          <a href="result.html" class="btn btn-primary btn-lg" id="viewResultBtn">查看生成进度 →</a>
+          <button class="btn btn-ghost" onclick="location.href='submit.html'">再生成一个</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- 页脚 -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-copy">© 2026 AI视频生成平台</div>
+      <div class="footer-links">
+        <a href="#">使用条款</a><a href="#">联系我们</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Toast -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+// 导航
+function toggleMenu(){
+  const m=document.getElementById('mobileMenu');
+  m.classList.toggle('open');
+  document.body.style.overflow=m.classList.contains('open')?'hidden':'';
+}
+function closeMenu(){
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+// ===== 画风数据 =====
+const STYLES = [
+  {
+    id: 'anime',
+    name: '动漫画风',
+    desc: '日式动画，鲜艳配色，细腻线条',
+    prompt: '日本动画风格，鲜艳色彩，细腻线条，动漫质感',
+    img: 'https://miaoda-site-img.cdn.bcebos.com/images/baidu_image_search_994e677c-9950-49d2-a881-96ef4670a82e.jpg',
+  },
+  {
+    id: '2d',
+    name: '二次元',
+    desc: '赛璐璐着色，萌系人物，扁平感',
+    prompt: '二次元风格，萌系角色，赛璐璐着色，扁平插画',
+    img: 'https://miaoda-site-img.cdn.bcebos.com/images/baidu_image_search_3a6d0aab-6bba-4daa-90b3-135a0f2fb8b2.jpg',
+  },
+  {
+    id: 'realistic',
+    name: '写实风格',
+    desc: '超真实渲染，电影质感，4K细节',
+    prompt: '超写实风格，电影级摄影质感，4K超清，真实光影',
+    img: 'https://miaoda-site-img.cdn.bcebos.com/images/baidu_image_search_5c629365-8f03-4d13-9363-05079d3fec22.jpg',
+  },
+  {
+    id: 'ink',
+    name: '水墨国风',
+    desc: '中国传统水墨，写意山水，意境深远',
+    prompt: '中国传统水墨画风格，写意山水，意境深远，留白美学',
+    img: 'https://miaoda-site-img.cdn.bcebos.com/images/baidu_image_search_ba0e3036-b39a-4302-9af2-76d5695b1332.jpg',
+  },
+  {
+    id: 'cyberpunk',
+    name: '赛博朋克',
+    desc: '霓虹都市，未来感，暗调高饱和',
+    prompt: '赛博朋克风格，霓虹灯，未来都市，暗色调，高对比色彩',
+    img: 'https://miaoda-site-img.cdn.bcebos.com/images/baidu_image_search_8eb28a8c-1eb0-4676-a229-2766486bdf2e.jpg',
+  },
+  {
+    id: 'pixar',
+    name: '皮克斯3D',
+    desc: '3D卡通渲染，圆润可爱，色彩明亮',
+    prompt: '皮克斯3D动画风格，圆润可爱人物，色彩明亮，高质量渲染',
+    img: 'https://miaoda-site-img.cdn.bcebos.com/images/baidu_image_search_5772df64-51d7-44d7-8b73-3ea384c27e38.jpg',
+  },
+  {
+    id: 'comic',
+    name: '复古漫画',
+    desc: 'Pop Art波点，手绘描边，复古印刷',
+    prompt: '复古美式漫画风格，波普艺术，手绘黑色描边，网点印刷感',
+    img: 'https://miaoda-site-img.cdn.bcebos.com/images/baidu_image_search_8a49f987-9327-403c-968f-66464bdb7133.jpg',
+  },
+  {
+    id: 'oilpaint',
+    name: '油画质感',
+    desc: '印象派笔触，厚重肌理，古典艺术',
+    prompt: '印象派油画风格，厚重笔触肌理，古典艺术质感，丰富色彩层次',
+    img: 'https://miaoda-site-img.cdn.bcebos.com/images/baidu_image_search_58780f7e-be8f-415a-bfb4-d2d0b2a95ff1.jpg',
+  },
+];
+
+// ===== 渲染画风卡片 =====
+let activeStyleId = '';
+
+function renderStyles() {
+  const grid = document.getElementById('styleGrid');
+  grid.innerHTML = STYLES.map(s => `
+    <div class="style-card" id="style-${s.id}" onclick="selectStyle('${s.id}')">
+      <div class="style-check">✓</div>
+      <div class="style-img-wrap">
+        <img src="${s.img}" alt="${s.name}" loading="lazy"
+             onerror="this.parentElement.style.background='var(--slate-200)';this.style.display='none'"/>
+      </div>
+      <div class="style-info">
+        <div class="style-name">${s.name}</div>
+        <div class="style-desc">${s.desc}</div>
+      </div>
+    </div>
+  `).join('');
+  // 默认选中第一个
+  selectStyle(STYLES[0].id);
+}
+
+function selectStyle(id) {
+  // 清除旧选中
+  document.querySelectorAll('.style-card').forEach(c => c.classList.remove('active'));
+  // 设置新选中
+  const card = document.getElementById('style-' + id);
+  if (card) card.classList.add('active');
+  activeStyleId = id;
+  document.getElementById('selectedStyle').value = id;
+}
+
+renderStyles();
+
+// 积分余额（模拟）
+const BALANCE=1250;
+
+// 字数统计
+document.getElementById('prompt').addEventListener('input',function(){
+  document.getElementById('promptCount').textContent=this.value.length+' / 500';
+  if(this.value.length>500) this.value=this.value.substring(0,500);
+  updateCost();
+});
+
+// 风格模板追加
+function addTpl(btn,text){
+  const ta=document.getElementById('prompt');
+  const cur=ta.value.trim();
+  ta.value=cur?(cur+'，'+text):text;
+  document.getElementById('promptCount').textContent=ta.value.length+' / 500';
+  btn.classList.toggle('active');
+}
+
+// 选项组单选
+function selectOpt(btn,groupId){
+  document.querySelectorAll('#'+groupId+' .option-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  updateCost();
+}
+
+// 高级选项
+let advOpen=false;
+function toggleAdv(){
+  advOpen=!advOpen;
+  document.getElementById('advPanel').style.display=advOpen?'block':'none';
+  document.getElementById('advBtn').textContent=(advOpen?'▾ 收起高级选项':'▸ 展开高级选项');
+}
+
+// 积分计算
+function getParams(){
+  const resBtn=document.querySelector('#resGroup .option-btn.active');
+  const durBtn=document.querySelector('#durGroup .option-btn.active');
+  const base=resBtn?parseInt(resBtn.dataset.base):90;
+  const mult=durBtn?parseFloat(durBtn.dataset.mult):1;
+  const cost=Math.round(base*mult);
+  const res=resBtn?resBtn.dataset.res:'1080p';
+  const dur=durBtn?durBtn.dataset.dur:'5';
+  return {base,mult,cost,res,dur};
+}
+
+function updateCost(){
+  const p=getParams();
+  document.getElementById('costShow').textContent=p.cost+' 积分';
+  document.getElementById('costNum').textContent=p.cost+' 积分';
+  document.getElementById('costRes').textContent=p.res.toUpperCase();
+  document.getElementById('costDur').textContent=p.dur+'秒';
+}
+
+// 初始化
+updateCost();
+
+// 表单验证
+function goStep2(){
+  const prompt=document.getElementById('prompt').value.trim();
+  const errEl=document.getElementById('errMsg');
+  errEl.style.display='none';
+  if(!prompt){errEl.style.display='';errEl.textContent='⚠️ 请输入视频提示词';return;}
+  if(prompt.length<8){errEl.style.display='';errEl.textContent='⚠️ 提示词过短，请至少输入8个字符';return;}
+  if(!activeStyleId){errEl.style.display='';errEl.textContent='⚠️ 请选择一种画面风格';return;}
+  const p=getParams();
+  if(p.cost>BALANCE){errEl.style.display='';errEl.textContent='⚠️ 积分余额不足（当前：'+BALANCE+'，需要：'+p.cost+'），请先充值';return;}
+
+  // 当前画风
+  const style = STYLES.find(s => s.id === activeStyleId);
+  // 构建确认信息
+  const ratioBtn=document.querySelector('#ratioGroup .option-btn.active');
+  const ratio=ratioBtn?ratioBtn.dataset.ratio:'16:9';
+  const fpsVal=document.getElementById('fps').value;
+  const items=[
+    {label:'提示词',value:prompt.length>80?prompt.substring(0,80)+'…':prompt},
+    {label:'画面风格',value:'<span style="display:inline-flex;align-items:center;gap:6px;"><img src="'+style.img+'" style="width:24px;height:18px;object-fit:cover;border-radius:3px;"/> <strong>'+style.name+'</strong></span>'},
+    {label:'分辨率',value:p.res.toUpperCase()},
+    {label:'时长',value:p.dur+' 秒'},
+    {label:'画面比例',value:ratio},
+    {label:'帧率',value:fpsVal+'fps'},
+    {label:'消耗积分',value:'<strong style="color:var(--primary);">'+p.cost+' 积分</strong>'},
+  ];
+  document.getElementById('confirmInfo').innerHTML=items.map(it=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--slate-100);">
+      <span class="text-muted text-sm">${it.label}</span>
+      <span style="font-size:.9375rem;font-weight:500;text-align:right;max-width:75%;">${it.value}</span>
+    </div>
+  `).join('');
+  document.getElementById('confirmCost').textContent=p.cost+' 积分';
+  goStep(2);
+}
+
+function doSubmit(){
+  const btn=document.getElementById('submitBtn');
+  btn.disabled=true;
+  btn.innerHTML='<div class="spinner"></div>提交中…';
+
+  // 模拟提交
+  setTimeout(()=>{
+    const taskId='T'+Date.now().toString(36).toUpperCase();
+    // 存入 localStorage，result.html 读取
+    const tasks=JSON.parse(localStorage.getItem('ai_tasks')||'[]');
+    const p=getParams();
+    tasks.unshift({
+      id:taskId,
+      prompt:document.getElementById('prompt').value.trim(),
+      style: activeStyleId,
+      styleName: (STYLES.find(s=>s.id===activeStyleId)||{}).name||'',
+      res:p.res,dur:p.dur,
+      cost:p.cost,
+      status:'processing',
+      progress:0,
+      createdAt:new Date().toISOString(),
+    });
+    localStorage.setItem('ai_tasks',JSON.stringify(tasks.slice(0,50)));
+
+    document.getElementById('taskIdShow').textContent=taskId;
+    document.getElementById('viewResultBtn').href='result.html?id='+taskId;
+    goStep(3);
+  },1200);
+}
+
+function goStep(n){
+  [1,2,3].forEach(i=>{
+    document.getElementById('panel'+i).style.display=i===n?'':'none';
+    const s=document.getElementById('s'+i);
+    s.classList.remove('active','done');
+    if(i<n) s.classList.add('done');
+    if(i===n) s.classList.add('active');
+    if(i<n) s.querySelector('.step-num').textContent='✓';
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function clearForm(){
+  document.getElementById('prompt').value='';
+  document.getElementById('promptCount').textContent='0 / 500';
+  document.getElementById('errMsg').style.display='none';
+  document.querySelectorAll('.option-btn.active').forEach(b=>b.classList.remove('active'));
+  document.querySelector('#resGroup [data-res="1080p"]').classList.add('active');
+  document.querySelector('#durGroup [data-dur="5"]').classList.add('active');
+  document.querySelector('#ratioGroup [data-ratio="16:9"]').classList.add('active');
+  updateCost();
+  showToast('表单已清空');
+}
+
+// Toast
+function showToast(msg,type=''){
+  const c=document.getElementById('toastContainer');
+  const t=document.createElement('div');
+  t.className='toast'+(type?' toast-'+type:'');
+  t.textContent=msg;
+  c.appendChild(t);
+  setTimeout(()=>t.remove(),3000);
+}
+</script>
+</body>
+</html>
